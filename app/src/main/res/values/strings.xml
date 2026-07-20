@@ -1,0 +1,4 @@
+<resources>
+    <!--고정 텍스트 관리 파일-->
+    <string name="app_name">SseunMat</string>
+</resources>

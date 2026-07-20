@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--색상 (Hex Code) 관리 파일-->
+<!--    예시:-->
+<!--    <color name="primary_main">#6200EE</color>-->
+<!--    <color name="text_black">#222222</color>-->
+<!--    <color name="text_gray_500">#888888</color>-->
+<!--    <color name="background_gray">#F5F5F5</color>-->
+
+<!--    xml 파일 내 사용 예시:-->
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@color/text_black"-->
+<!--        android:textSize="@dimen/text_size_title"-->
+<!--        android:letterSpacing="0.02"-->
+<!--        android:lineSpacingExtra="@dimen/line_spacing_body" />-->
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

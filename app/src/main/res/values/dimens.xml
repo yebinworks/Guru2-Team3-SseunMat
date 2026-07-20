@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--폰트 크기, 간격, 자간/행간 관리 파일-->
+<!--    예시:-->
+<!--    &lt;!&ndash; 폰트 크기 (sp) &ndash;&gt;-->
+<!--    <dimen name="text_size_title">20sp</dimen>-->
+<!--    <dimen name="text_size_body">14sp</dimen>-->
+
+<!--    &lt;!&ndash; 자간 / 행간 / 여백 (dp or sp) &ndash;&gt;-->
+<!--    <dimen name="letter_spacing_narrow">-0.02sp</dimen>-->
+<!--    <dimen name="line_spacing_body">4dp</dimen>-->
+<!--    <dimen name="margin_default">16dp</dimen>-->
+</resources>
