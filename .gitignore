@@ -1,15 +1,54 @@
+# Android Studio / Gradle / Kotlin .gitignore
+
+# Built application files
+*.apk
+*.aar
+*.aab
+
+# Files for the ART/DALVIK Virtual Machine
+*.dex
+
+# Java class files
+*.class
+
+# Generated files / Build outputs
+bin/
+gen/
+out/
+build/
+.gradle/
+app/build/
+
+# Local configuration file (SDK 경로, 키 등 민감정보 저장)
+local.properties
+
+# Log Files
+*.log
+
+# Android Studio / IntelliJ IDEA 캐시 및 개인 설정 파일
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetStudio.xml
+.idea/deploymentTargetSelector.xml
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
+*.ipr
+*.iws
+
+# Keystore / 서명 파일
+*.jks
+*.keystore
+
+# External native build folder
 .externalNativeBuild
 .cxx
-local.properties
+
+# OS 생성 임시 파일
+.DS_Store
+Thumbs.db
+
+# API Key / 보안 프로퍼티 파일
+secrets.properties
+google-services.json
