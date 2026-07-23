@@ -21,3 +21,5 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 }
+
+// 회원가입 기능 구현 시 setOnClickListener 안에 firebaseService.signUp(...){...} 불러오시면 됩니다!
