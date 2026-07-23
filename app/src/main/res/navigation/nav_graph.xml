@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--[공통] 바텀 네비게이션 화면 전환 그래프-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph">
+
+</navigation>

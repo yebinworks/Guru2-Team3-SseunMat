@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SseunMat">
         <activity
+            android:name=".ui.archive.ValueDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.write.ReceiptWriteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
