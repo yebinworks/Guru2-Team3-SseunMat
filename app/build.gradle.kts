@@ -1,8 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.android.application")
-    id("com.google.gms.google-services") version "4.5.0" apply false
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -51,7 +50,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Firebase 라이브러리 추가
-    implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
 }

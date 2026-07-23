@@ -6,7 +6,7 @@ import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
 data class Users(
-    val usersId: String = "",           // 유저아이디 (Firebase Auth UID, 자동생성 스트링)
+    val usersId: String = "",           // 유저아이디 (Firebase Auth UID, 자동생성)
     val email: String = "",             // 이메일
     val nickname: String = "",          // 닉네임
     // '비밀번호'는 DB에 직접 저장하지 않음

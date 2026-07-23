@@ -12,8 +12,9 @@ data class Receipt(
 
     // 영수증 기본 정보
     val store: String = "",             // 상호명
-    val date: String = "",              // 결제 날짜 (앱 표준 포맷: "2026. 07. 20", 저장은 시간까지)
-    val amount: Int = 0,                // 최종 결제 금액 (원시 숫자값, 노출 시 "₩ 89,000" 포맷팅)
+    val paymentDate: Date? = null,      // 결제 날짜 (앱 표준 포맷: "2026. 07. 20", 저장은 시간까지)
+    val amount: Long = 0L,              // 최종 결제 금액 (원시 숫자값, 노출 시 "₩ 89,000" 포맷팅)
+
 
     // 가치 지출 일기 정보
     val value: String = "",             // 가치 (소비 카테고리)
