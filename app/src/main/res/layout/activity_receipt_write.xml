@@ -1,11 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[주은]-->
+<!--[공통]-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".ui.write.ReceiptWriteActivity">
+
+    <!-- 상단 헤더 (뒤로가기 + 타이틀) -->
+    <LinearLayout
+        android:id="@+id/layout_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="뒤로가기"
+            android:src="@android:drawable/ic_menu_revert" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="영수증 등록"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_title"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+    </LinearLayout>
+
+    <!-- 중앙 스크롤 입력 영역 -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- 안내 헤더 (가변 타이틀/서브타이틀) -->
+            <TextView
+                android:id="@+id/tv_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="영수증 정보를\n확인해 주세요"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_header"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_header_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="24dp"
+                android:text="AI가 분석한 영수증 정보가 맞는지 확인해 주세요"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_body" />
+
+            <!-- 상호명 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상호명 / 소비 장소"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_store"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_box"
+                android:hint="상호명 또는 소비 장소를 입력해주세요"
+                android:inputType="text"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body" />
+
+            <TextView
+                android:id="@+id/tv_error_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="상호명을 입력해 주세요."
+                tools:visibility="visible" />
+
+            <!-- 2. 결제 날짜 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="결제 날짜"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_date"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_box"
+                android:hint="숫자만 입력해주세요 (YYYYMMDD)"
+                android:inputType="number"
+                android:maxLength="13"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body" />
+
+            <TextView
+                android:id="@+id/tv_error_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="날짜 8자리를 입력해 주세요 (예: 20260724)"
+                tools:visibility="visible" />
+
+            <!-- 3. 최종 결제 금액 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="최종 결제 금액"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_amount"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_box"
+                android:hint="숫자만 입력해주세요"
+                android:inputType="number"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body" />
+
+            <TextView
+                android:id="@+id/tv_error_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="0원보다 큰 금액을 입력해 주세요."
+                tools:visibility="visible" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 하단 다음 버튼 -->
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_height_primary"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/btn_disabled"
+        android:enabled="false"
+        android:text="다음"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_body"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

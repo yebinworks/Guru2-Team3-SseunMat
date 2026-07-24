@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--[예빈]-->
+<!-- 5. 영수증 스캔 및 AI 분석 화면 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,7 +10,7 @@
     android:background="@android:color/white"
     tools:context=".ui.write.ReceiptScanActivity">
 
-    <!-- 1. 메인 촬영/가이드 화면 영역 -->
+    <!-- 메인 촬영/가이드 화면 영역 -->
     <LinearLayout
         android:id="@+id/layout_camera_guide"
         android:layout_width="0dp"
@@ -101,7 +102,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- 2. AI 분석 중 로딩 오버레이 레이아웃 -->
+    <!-- 5.3.2 AI 분석 중 로딩 오버레이 레이아웃 -->
     <LinearLayout
         android:id="@+id/layout_analysis_loading"
         android:layout_width="0dp"

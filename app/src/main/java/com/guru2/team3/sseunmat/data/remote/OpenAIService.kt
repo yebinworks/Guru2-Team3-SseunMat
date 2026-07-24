@@ -40,7 +40,7 @@ class OpenAIService {
                                 put("text", """
                                     이 영수증 사진을 분석해서 아래 3개 필드를 가진 JSON 객체로 반환해줘.
                                     - store: 상호명/가게 이름 (없으면 "")
-                                    - date: 결제 날짜 (형식: YYYY. MM. DD 또는 YYYYMMDD, 없으면 "")
+                                    - date: 결제 날짜 (형식: YYYYMMDD, 없으면 "")
                                     - amount: 총 지출 금액 (숫자만, 없으면 0)
                                 """.trimIndent())
                             })

@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.ui.write.ReceiptScanActivity
+import com.guru2.team3.sseunmat.ui.write.ReceiptWriteActivity
 import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {

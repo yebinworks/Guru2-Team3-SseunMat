@@ -28,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// 5. 영수증 스캔 및 AI 분석 화면
 class ReceiptScanActivity : AppCompatActivity() {
 
     private lateinit var btnBack: ImageView
