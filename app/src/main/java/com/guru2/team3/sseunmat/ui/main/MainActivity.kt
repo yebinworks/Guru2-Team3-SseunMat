@@ -6,8 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.guru2.team3.sseunmat.R
-import com.guru2.team3.sseunmat.ui.write.ReceiptScanActivity
-import com.guru2.team3.sseunmat.ui.write.ReceiptWriteActivity
+import com.guru2.team3.sseunmat.ui.write.ReceiptValueWriteActivity
 import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +15,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // [기능 테스트시 사용] 방금 개발한 Activity로 변경
-        val intent = Intent(this, ReceiptScanActivity::class.java)
+        val intent = Intent(this, ReceiptValueWriteActivity::class.java).apply {
+            putExtra("STORE", "더벤티 노원점")
+            putExtra("DATE", "2026. 07. 24")
+            putExtra("AMOUNT", 12500L)
+        }
+
         startActivity(intent)
-        finish()
     }
 }
