@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--폰트 크기, 간격, 자간/행간 관리 파일-->
-<!--    예시:-->
-<!--    &lt;!&ndash; 폰트 크기 (sp) &ndash;&gt;-->
-<!--    <dimen name="text_size_title">20sp</dimen>-->
-<!--    <dimen name="text_size_body">14sp</dimen>-->
+    <!-- 폰트 크기 규격 -->
+    <dimen name="text_size_header">24sp</dimen>      <!-- 큰 제목 / 메인 헤더 -->
+    <dimen name="text_size_title">18sp</dimen>       <!-- 화면 타이틀 / 카드 제목 -->
+    <dimen name="text_size_subtitle">16sp</dimen>    <!-- 서브 타이틀 / 섹션 제목 -->
+    <dimen name="text_size_body">14sp</dimen>        <!-- 일반 본문 / 버튼 / 입력창 -->
+    <dimen name="text_size_small">12sp</dimen>       <!-- 캡션 / 에러 문구 / 날짜 -->
+    <dimen name="text_size_tiny">10sp</dimen>        <!-- 아주 작은 부가 정보 -->
 
-<!--    &lt;!&ndash; 자간 / 행간 / 여백 (dp or sp) &ndash;&gt;-->
-<!--    <dimen name="letter_spacing_narrow">-0.02sp</dimen>-->
-<!--    <dimen name="line_spacing_body">4dp</dimen>-->
-<!--    <dimen name="margin_default">16dp</dimen>-->
+    <!-- 여백 및 간격 (Margin & Padding) -->
+    <dimen name="spacing_tiny">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">20dp</dimen>
+    <dimen name="spacing_huge">24dp</dimen>
+
+    <!-- 컴포넌트 크기 및 높이 규격 -->
+    <dimen name="btn_height_primary">52dp</dimen>    <!-- 주요 메인 하단 버튼 높이 -->
+    <dimen name="input_box_height">48dp</dimen>      <!-- EditText 입력창 높이 -->
+    <dimen name="icon_size_medium">24dp</dimen>      <!-- 기본 아이콘 크기 -->
+    <dimen name="card_corner_radius">12dp</dimen>    <!-- 카드리프 / 입력창 모서리 둥글기 -->
 </resources>
