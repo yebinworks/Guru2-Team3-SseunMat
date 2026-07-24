@@ -39,7 +39,7 @@ class ReceiptScanActivity : AppCompatActivity() {
     private val openAIService = OpenAIService()
     private var isGalleryMode = false
 
-    // 1. 카메라 촬영 결과 받아오기
+    // 카메라 촬영 결과 받아오기
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             val bitmap = result.data?.extras?.get("data") as? Bitmap
@@ -52,10 +52,10 @@ class ReceiptScanActivity : AppCompatActivity() {
         }
     }
 
-    // 2. 갤러리 이미지 선택 결과 받아오기
+    // 갤러리 이미지 선택 결과 받아오기
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            // [수정 ②] 갤러리 이미지 로딩 시 메인 스레드가 멈추지 않도록 IO 스레드에서 백그라운드로 처리
+            // 갤러리 이미지 로딩 시 메인 스레드가 멈추지 않도록 IO 스레드에서 백그라운드로 처리
             lifecycleScope.launch(Dispatchers.IO) {
                 val bitmap = getBitmapFromUri(it)
                 withContext(Dispatchers.Main) {
@@ -70,7 +70,7 @@ class ReceiptScanActivity : AppCompatActivity() {
         }
     }
 
-    // 3. 권한 요청 처리
+    // 권한 요청 처리
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             startImagePickOrCapture()
@@ -153,15 +153,12 @@ class ReceiptScanActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * OpenAI API로 이미지 전달 후 분석 처리
-     */
+    // OpenAI API로 이미지 전달 후 분석
     private fun analyzeImageWithOpenAI(bitmap: Bitmap) {
         layoutCameraGuide.visibility = View.GONE
         layoutAnalysisLoading.visibility = View.VISIBLE
 
         lifecycleScope.launch {
-            // openAIService로 호출
             val result = openAIService.analyzeReceiptImage(bitmap)
             layoutAnalysisLoading.visibility = View.GONE
 
@@ -178,6 +175,7 @@ class ReceiptScanActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }.onFailure { error ->
+                // 디버깅용 로그 출력
                 android.util.Log.e("OpenAIFailure", "분석 실패 이유: ${error.message}", error)
                 showToast("영수증 정보를 정확히 읽지 못했어요. 직접 입력해 주세요.")
                 navigateToManualWrite()

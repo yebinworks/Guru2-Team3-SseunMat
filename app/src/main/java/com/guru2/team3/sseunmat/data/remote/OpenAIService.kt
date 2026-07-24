@@ -2,7 +2,6 @@ package com.guru2.team3.sseunmat.data.remote
 
 import android.graphics.Bitmap
 import android.util.Base64
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.guru2.team3.sseunmat.BuildConfig
 import kotlinx.coroutines.Dispatchers
@@ -22,11 +21,11 @@ class OpenAIService {
 
     suspend fun analyzeReceiptImage(bitmap: Bitmap): Result<Triple<String, String, Long>> = withContext(Dispatchers.IO) {
         try {
-            // 1. 이미지 압축 및 Base64 인코딩
+            // 이미지 압축 및 Base64 인코딩
             val resizedBitmap = bitmap.resizeAndCompressBitmap(1024)
             val base64Image = bitmapToBase64(resizedBitmap)
 
-            // 2. OpenAI API 요청 JSON 생성 (gpt-4o-mini 지정)
+            // OpenAI API 요청 JSON 생성 (gpt-4o-mini 지정)
             val requestJson = JSONObject().apply {
                 put("model", "gpt-4o-mini")
                 put("response_format", JSONObject().put("type", "json_object")) // JSON 전용 응답 강제
@@ -61,7 +60,7 @@ class OpenAIService {
                 put("max_tokens", 300)
             }
 
-            // 3. HTTP 요청 보내기
+            // HTTP 요청 보내기
             val mediaType = "application/json; charset=utf-8".toMediaType()
             val body = requestJson.toString().toRequestBody(mediaType)
 
@@ -78,7 +77,7 @@ class OpenAIService {
                 return@withContext Result.failure(RuntimeException("OpenAI API 에러: ${response.code} - $responseBody"))
             }
 
-            // 4. 응답 JSON 파싱
+            // 응답 JSON 파싱
             val jsonResponse = JsonParser.parseString(responseBody).asJsonObject
             val contentText = jsonResponse.getAsJsonArray("choices")
                 .get(0).asJsonObject

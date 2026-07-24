@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // [기능 테스트시 사용] 방금 개발한 Activity로 변경
         val intent = Intent(this, ReceiptScanActivity::class.java)
         startActivity(intent)
         finish()
