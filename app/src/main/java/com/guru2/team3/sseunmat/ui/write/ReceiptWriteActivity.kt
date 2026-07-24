@@ -2,6 +2,7 @@ package com.guru2.team3.sseunmat.ui.write
 
 //  # [공통] 5,6. AI 스캔 결과 수정 & 수동 작성 (코드 재사용)
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -33,6 +34,7 @@ class ReceiptWriteActivity : AppCompatActivity() {
     private lateinit var tvErrorStore: TextView
     private lateinit var tvErrorDate: TextView
     private lateinit var tvErrorAmount: TextView
+    private lateinit var btnRetryScan: Button
     private lateinit var btnNext: Button
 
     private var isFormattingDate = false
@@ -40,6 +42,7 @@ class ReceiptWriteActivity : AppCompatActivity() {
 
     // 내부 저장/전달용 원시 금액 데이터 (Long)
     private var rawAmount: Long = 0L
+    private var isGalleryMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,12 +72,14 @@ class ReceiptWriteActivity : AppCompatActivity() {
         tvErrorStore = findViewById(R.id.tv_error_store)
         tvErrorDate = findViewById(R.id.tv_error_date)
         tvErrorAmount = findViewById(R.id.tv_error_amount)
+        btnRetryScan = findViewById(R.id.btn_retry_scan)
         btnNext = findViewById(R.id.btn_next)
     }
 
     // AI 스캔(ReceiptScanActivity)에서 넘겨받은 JSON 데이터 자동 채우기 또는 수동 입력
     private fun loadIntentDataDataAndSetupUI() {
         val isManualMode = intent.getBooleanExtra("IS_MANUAL_MODE", false)
+        isGalleryMode = intent.getBooleanExtra("IS_GALLERY_MODE", false)
         val extractedStore = intent.getStringExtra("EXTRACTED_STORE") ?: ""
         val extractedDate = intent.getStringExtra("EXTRACTED_DATE") ?: ""
         val extractedAmount = intent.getLongExtra("EXTRACTED_AMOUNT", 0L)
@@ -87,16 +92,23 @@ class ReceiptWriteActivity : AppCompatActivity() {
             isManualMode -> {
                 tvHeaderTitle.text = "직접 등록"
                 tvHeaderSubtitle.text = "영수증 정보를 직접 입력해 주세요"
+                btnRetryScan.visibility = View.GONE
             }
             // 2. AI 분석 결과 모든 항목이 인식된 경우
             isFullyExtracted -> {
                 tvHeaderTitle.text = "영수증 정보를\n확인해 주세요"
                 tvHeaderSubtitle.text = "AI가 분석한 영수증 정보가 맞는지 확인해 주세요"
+
+                btnRetryScan.visibility = View.VISIBLE
+                btnRetryScan.text = if (isGalleryMode) "다른 이미지 선택하기" else "다시 촬영하기"
             }
             // 3. AI 분석에 실패했거나 일부 항목이 빈 경우
             else -> {
                 tvHeaderTitle.text = "영수증 정보를\n정확히 읽지 못했어요"
                 tvHeaderSubtitle.text = "인식되지 않거나 잘못된 항목을 직접 입력해 주세요"
+
+                btnRetryScan.visibility = View.VISIBLE
+                btnRetryScan.text = if (isGalleryMode) "다른 이미지 선택하기" else "다시 촬영하기"
             }
         }
 
@@ -152,6 +164,14 @@ class ReceiptWriteActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         btnBack.setOnClickListener { finish() }
+
+        btnRetryScan.setOnClickListener {
+            val intent = Intent(this, ReceiptScanActivity::class.java).apply {
+                putExtra("IS_GALLERY_MODE", isGalleryMode)
+            }
+            startActivity(intent)
+            finish()
+        }
 
         // 상호명 변경 감지
         etStore.addTextChangedListener(object : TextWatcher {

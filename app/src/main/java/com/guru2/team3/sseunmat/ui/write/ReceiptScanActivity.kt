@@ -169,6 +169,7 @@ class ReceiptScanActivity : AppCompatActivity() {
                 android.util.Log.d("OpenAISuccess", "지출 금액(Amount): $amount")
 
                 val intent = Intent(this@ReceiptScanActivity, ReceiptWriteActivity::class.java).apply {
+                    putExtra("IS_GALLERY_MODE", isGalleryMode)
                     putExtra("EXTRACTED_STORE", store)
                     putExtra("EXTRACTED_DATE", date)
                     putExtra("EXTRACTED_AMOUNT", amount)
@@ -185,7 +186,9 @@ class ReceiptScanActivity : AppCompatActivity() {
     }
 
     private fun navigateToManualWrite() {
-        val intent = Intent(this, ReceiptWriteActivity::class.java)
+        val intent = Intent(this, ReceiptWriteActivity::class.java).apply {
+            putExtra("IS_GALLERY_MODE", isGalleryMode)
+        }
         startActivity(intent)
         finish()
     }
