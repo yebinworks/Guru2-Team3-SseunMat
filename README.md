@@ -20,8 +20,8 @@
 ---
 
 ## ⚠️ 평가 시 실행 및 보안 안내
-* **API Key 보안 관리:** 본 프로젝트는 보안 키 보호를 위해 Gemini API Key 및 `google-services.json` 파일이 `.gitignore` 처리되어 있습니다.
-* **제출 안내:** 앱 빌드 및 테스트를 위해 필요한 `google-services.json` 파일과 `local.properties` (Gemini API Key 설정값)는 **이클래스 과제함 첨부파일**로 함께 제출하였습니다.
+* **API Key 보안 관리:** 본 프로젝트는 보안 키 보호를 위해 OpenAI API Key 및 `google-services.json` 파일이 `.gitignore` 처리되어 있습니다.
+* **제출 안내:** 앱 빌드 및 테스트를 위해 필요한 `google-services.json` 파일과 `local.properties` (OpenAI API Key 설정값)는 **이클래스 과제함 첨부파일**로 함께 제출하였습니다.
 * **테스트 계정:**
     * **ID:** `추후 작성`
     * **PW:** `추후 작성`
@@ -49,7 +49,7 @@
 * **Language:** Kotlin
 * **UI Framework:** Android XML, Material Design
 * **Database & Auth:** Firebase Cloud Firestore, Firebase Authentication
-* **AI & Open API:** Google Gemini AI SDK (영수증 OCR 스캔)
+* **AI & Open API:** OpenAI GPT-4o-mini (영수증 OCR 스캔)
 * **Design Tools:** Figma
 * **VCS & Tools:** GitHub, Android Studio
 

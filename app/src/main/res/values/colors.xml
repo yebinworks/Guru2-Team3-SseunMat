@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--색상 (Hex Code) 관리 파일-->
-<!--    예시:-->
-<!--    <color name="primary_main">#6200EE</color>-->
-<!--    <color name="text_black">#222222</color>-->
-<!--    <color name="text_gray_500">#888888</color>-->
-<!--    <color name="background_gray">#F5F5F5</color>-->
-
-<!--    xml 파일 내 사용 예시:-->
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textColor="@color/text_black"-->
-<!--        android:textSize="@dimen/text_size_title"-->
-<!--        android:letterSpacing="0.02"-->
-<!--        android:lineSpacingExtra="@dimen/line_spacing_body" />-->
-
+    <!-- 기본 브랜드 / 프라이머리 컬러 -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- 쓴맛(SseunMat) 메인 포인트 테마 컬러 -->
+    <color name="main_purple">#7E69FF</color>
+    <color name="main_purple_light">#EFEFFF</color>
+
+    <!-- 버튼 상태 컬러 -->
+    <color name="btn_active">#7E69FF</color>
+    <color name="btn_disabled">#D2D2D2</color>
+
+    <!-- 텍스트 컬러 -->
+    <color name="text_black">#191919</color>
+    <color name="text_gray">#8E8E8E</color>
+    <color name="text_light_gray">#B8B8B8</color>
+    <color name="text_error">#FF4D4D</color>
+
+    <!-- 배경 및 테두리/입력창 컬러 -->
+    <color name="bg_input">#F8F9FA</color>
+    <color name="border_input">#E2E8F0</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="divider">#F1F5F9</color>
+
+    <!-- 가치(Value) 카테고리 대표 컬러 (선택 상태 및 그래프용) -->
+    <color name="val_comfort">#FFB7B2</color>   <!-- 위로 -->
+    <color name="val_rest">#FFDAC1</color>      <!-- 휴식 -->
+    <color name="val_relation">#E2F0CB</color>  <!-- 관계 -->
+    <color name="val_memory">#B5EAD7</color>    <!-- 추억 -->
+    <color name="val_learn">#C7CEEA</color>     <!-- 배움 -->
+    <color name="val_inspire">#E0BBE4</color>   <!-- 영감 -->
+    <color name="val_heart">#FEC8D8</color>     <!-- 마음 표현 -->
 </resources>
