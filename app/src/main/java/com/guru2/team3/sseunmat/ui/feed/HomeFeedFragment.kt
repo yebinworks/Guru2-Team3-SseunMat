@@ -52,7 +52,6 @@ class HomeFeedFragment : Fragment() {
         layoutEmptyState = view.findViewById(R.id.layout_empty_state)
         vpReceiptCards = view.findViewById(R.id.vp_receipt_cards)
         tvCardIndicator = view.findViewById(R.id.tv_card_indicator)
-        btnAddReceipt = view.findViewById(R.id.btn_add_receipt)
 
         // 현재 월 표시 (예: 7월)
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[예빈]-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- 상단 월 표시 및 프로필 버튼 -->
+    <!-- 상단 월 표시 및 프로필 -->
     <TextView
         android:id="@+id/tv_current_month"
         android:layout_width="wrap_content"
@@ -31,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_current_month" />
 
-    <!-- 3.1.3 홈 빈 상태 (영수증이 없을 때) -->
+    <!-- 홈 빈 상태 -->
     <LinearLayout
         android:id="@+id/layout_empty_state"
         android:layout_width="wrap_content"
@@ -42,8 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="80dp"
@@ -68,48 +66,33 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- 3.2 세로 카드 ViewPager2 -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_receipt_cards"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/tv_card_indicator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_current_month" />
-
-    <!-- 3.2.2 카드 순서 표시 인디케이터 (예: 3 / 12) -->
+    <!-- 하단 카드 인디케이터 (3 / 12) - 위치 고정 -->
     <TextView
         android:id="@+id/tv_card_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/bg_value_chip_selector"
         android:paddingHorizontal="16dp"
         android:paddingVertical="6dp"
         android:textColor="@color/text_black"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/layout_bottom_nav"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="3 / 12" />
+        tools:text="1 / 3" />
 
-    <!-- 하단 네비게이션 영역 -->
-    <LinearLayout
-        android:id="@+id/layout_bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <!-- + 버튼 (영수증 등록 모달/화면 이동) -->
-        <ImageView
-            android:id="@+id/btn_add_receipt"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_input_add" />
-    </LinearLayout>
+    <!-- 세로 카드 ViewPager2 (상단 월 텍스트 ~ 하단 인디케이터 사이 채우기) -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_receipt_cards"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/tv_card_indicator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_current_month" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
