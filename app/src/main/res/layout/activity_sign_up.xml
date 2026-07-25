@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[주은]-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- [주은] 회원가입 화면 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,4 +9,206 @@
     android:layout_height="match_parent"
     tools:context=".ui.auth.SignUpActivity">
 
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/spacing_huge"
+            android:paddingVertical="@dimen/spacing_huge">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회원가입"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_header" />
+
+            <!-- 이메일 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_huge"
+                android:text="이메일"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_small" />
+
+            <EditText
+                android:id="@+id/et_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:background="@drawable/bg_input_box"
+                android:paddingHorizontal="@dimen/spacing_medium"
+                android:hint="이메일을 입력해주세요"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_gray"
+                android:textSize="@dimen/text_size_body"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_email_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="이미 가입된 이메일입니다"
+                tools:visibility="visible" />
+
+            <!-- 비밀번호 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="비밀번호"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_small" />
+
+            <EditText
+                android:id="@+id/et_user_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:background="@drawable/bg_input_box"
+                android:paddingHorizontal="@dimen/spacing_medium"
+                android:hint="영문, 숫자, 특수문자 조합 8자 이상"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_gray"
+                android:textSize="@dimen/text_size_body"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_password_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="영문, 숫자, 특수문자 조합 8자 이상으로 입력해주세요" />
+
+            <!-- 비밀번호 확인 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="비밀번호 확인"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_small" />
+
+            <EditText
+                android:id="@+id/et_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:background="@drawable/bg_input_box"
+                android:paddingHorizontal="@dimen/spacing_medium"
+                android:hint="비밀번호를 한 번 더 입력해주세요"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_gray"
+                android:textSize="@dimen/text_size_body"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_password_confirm_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="비밀번호가 맞지 않습니다" />
+
+            <!-- 닉네임 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="닉네임"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_small" />
+
+            <EditText
+                android:id="@+id/et_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_box_height"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:background="@drawable/bg_input_box"
+                android:paddingHorizontal="@dimen/spacing_medium"
+                android:hint="2자 이상 10자 이하"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_gray"
+                android:textSize="@dimen/text_size_body"
+                android:inputType="text"
+                android:maxLength="10"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tv_nickname_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="닉네임은 2자 이상 10자 이하로 입력해주세요" />
+
+            <!-- 약관 동의 -->
+            <CheckBox
+                android:id="@+id/cb_terms_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_huge"
+                android:text="서비스 이용약관 동의 (필수)"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body" />
+
+            <CheckBox
+                android:id="@+id/cb_terms_privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="개인정보 수집 및 이용 동의 (필수)"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body" />
+
+            <!-- 가입 버튼 -->
+            <Button
+                android:id="@+id/btn_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height_primary"
+                android:layout_marginTop="@dimen/spacing_huge"
+                android:background="@drawable/bg_btn_primary"
+                android:text="가입하기"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_body"
+                android:stateListAnimator="@null"
+                android:enabled="false" />
+
+            <!-- 서버 오류 등 가입 실패 안내 -->
+            <TextView
+                android:id="@+id/tv_sign_up_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:textColor="@color/text_error"
+                android:textSize="@dimen/text_size_small"
+                android:visibility="gone"
+                tools:text="회원가입에 실패했어요. 잠시 후 다시 시도해 주세요." />
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
