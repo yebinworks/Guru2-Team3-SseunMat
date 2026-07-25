@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[예빈]-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- [주은] 스플래시 화면 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,4 +9,57 @@
     android:layout_height="match_parent"
     tools:context=".ui.splash.SplashActivity">
 
+    <!-- 중앙 로고 + 서비스명 -->
+    <LinearLayout
+        android:id="@+id/layout_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="앱 로고" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="쓴맛"
+            android:textStyle="bold"
+            android:textColor="@color/main_purple"
+            android:textSize="@dimen/text_size_header" />
+    </LinearLayout>
+
+    <!-- 하단 로딩 표시 [0.1.1] -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ProgressBar
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:indeterminateTint="@color/text_light_gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="로그인 상태를 확인하고 있어요"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/text_size_small" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
