@@ -59,11 +59,20 @@ class HomeFeedFragment : Fragment() {
     }
 
     private fun setupViewPager() {
-        cardAdapter = ReceiptCardAdapter(emptyList())
-        vpReceiptCards.adapter = cardAdapter
-        vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL // 3.2.1 세로 스와이프
+        cardAdapter = ReceiptCardAdapter(mutableListOf()) {
+            if (cardAdapter.itemCount == 0) {
+                layoutEmptyState.visibility = View.VISIBLE
+                vpReceiptCards.visibility = View.GONE
+                tvCardIndicator.visibility = View.GONE
+            } else {
+                val currentPos = vpReceiptCards.currentItem
+                tvCardIndicator.text = "${currentPos + 1} / ${cardAdapter.itemCount}"
+            }
+        }
 
-        // 3.2.2 카드 순서 표시
+        vpReceiptCards.adapter = cardAdapter
+        vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
+
         vpReceiptCards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

@@ -92,4 +92,21 @@ class FirebaseService {
                 onResult(emptyList())
             }
     }
+
+    // 영수증 즉시 삭제 (8.3.2)
+    fun deleteReceipt(receiptId: String, onComplete: (Boolean) -> Unit) {
+        if (receiptId.isBlank()) {
+            onComplete(false)
+            return
+        }
+
+        db.collection("receipts").document(receiptId)
+            .delete()
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+            .addOnFailureListener {
+                onComplete(false)
+            }
+    }
 }

@@ -1,15 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--[예빈]-->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.archive.ArchiveFragment">
+    android:background="@android:color/white"
+    android:fillViewport="true">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:padding="20dp">
 
-</FrameLayout>
+        <!-- 7.1.1 이번 달 기준 표시 (예: 2026. 07) -->
+        <TextView
+            android:id="@+id/tv_archive_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2026. 07" />
+
+        <!-- 7.1.2 당월 빈 상태 (Empty View) -->
+        <LinearLayout
+            android:id="@+id/layout_archive_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="이달에는 아직 기록된 가치가 없어요."
+                android:textColor="@color/text_black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- 데이터 존재 시 보여줄 요약 컨테이너 -->
+        <LinearLayout
+            android:id="@+id/layout_archive_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_archive_date">
+
+            <!-- 7.2.2 대표 가치 표시 문구 -->
+            <TextView
+                android:id="@+id/tv_top_value_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5F3FF"
+                android:padding="16dp"
+                android:textColor="@color/btn_active"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="이번 달 가장 많이 남은 가치는 '관계'였어요." />
+
+            <!-- 7.2.3 당월 평균 만족도 -->
+            <TextView
+                android:id="@+id/tv_average_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/text_black"
+                android:textSize="15sp"
+                tools:text="이번 달 평균 만족도 : 4.2점" />
+
+            <!-- 7.2.1 가치별 횟수 리사이클러뷰 (그래프/목록) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_value_graph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
