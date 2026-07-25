@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.guru2.team3.sseunmat.R
+import com.guru2.team3.sseunmat.ui.archive.ArchiveFragment
 import com.guru2.team3.sseunmat.ui.feed.HomeFeedFragment
 import com.guru2.team3.sseunmat.ui.write.ReceiptModeBottomSheet
 
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
                 R.id.nav_archive -> {
-                    // TODO: ArchiveFragment 완성 시 교체
+                    replaceFragment(ArchiveFragment.newInstance())
                     true
                 }
                 else -> false

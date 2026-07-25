@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 게이지 바 전체 배경 (연한 회보라) -->
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="4dp" />
+            <solid android:color="#EAE8F4" />
+        </shape>
+    </item>
+
+    <!-- 채워지는 비율 (메인 보라색) -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners android:radius="4dp" />
+                <solid android:color="#8072FB" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>
