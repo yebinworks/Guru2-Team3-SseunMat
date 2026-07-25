@@ -5,6 +5,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.guru2.team3.sseunmat.data.model.Receipt
 import com.guru2.team3.sseunmat.data.model.Users
+import java.util.Calendar
 
 // [예빈] Firebase Auth & Firestore CRUD
 
@@ -58,5 +59,54 @@ class FirebaseService {
         docRef.set(finalReceipt)
             .addOnSuccessListener { onResult(true) }
             .addOnFailureListener { onResult(false) }
+    }
+
+    // 이번 달에 등록된 영수증 조회 (3.1.1 & 3.1.2)
+    fun getThisMonthReceipts(onResult: (List<Receipt>) -> Unit) {
+        // TODO: 실제 유저 아이디로 추후 변경
+        val currentUserId = "1"
+
+        // 이번 달 1일 00:00:00 계산
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        val startOfMonth = calendar.time
+
+        db.collection("receipts")
+            .whereEqualTo("usersId", currentUserId)
+            .whereGreaterThanOrEqualTo("paymentDate", startOfMonth)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val list = querySnapshot.toObjects(Receipt::class.java)
+
+                // 3.1.2 정렬: 결제 날짜 내림차순 -> createdAt 내림차순
+                val sortedList = list.sortedWith(
+                    compareByDescending<Receipt> { it.paymentDate }
+                        .thenByDescending { it.createdAt }
+                )
+                onResult(sortedList)
+            }
+            .addOnFailureListener {
+                onResult(emptyList())
+            }
+    }
+
+    // 영수증 즉시 삭제 (8.3.2)
+    fun deleteReceipt(receiptId: String, onComplete: (Boolean) -> Unit) {
+        if (receiptId.isBlank()) {
+            onComplete(false)
+            return
+        }
+
+        db.collection("receipts").document(receiptId)
+            .delete()
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+            .addOnFailureListener {
+                onComplete(false)
+            }
     }
 }

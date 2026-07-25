@@ -1,7 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- [공통] 영수증 카드 앞/뒷면 레이아웃 -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="32dp"
+    android:paddingVertical="24dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- 카드 메인 컨테이너 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp">
+
+        <!-- 카드 앞면 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_card_front"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFF2E6"
+            android:padding="24dp">
+
+            <!-- 카테고리 아이콘 / 결제 날짜 -->
+            <ImageView
+                android:id="@+id/iv_front_category_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_rating_dot_on"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 가장 우측 상단: 삭제 쓰레기통 아이콘 -->
+            <ImageView
+                android:id="@+id/btn_delete_receipt"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:contentDescription="삭제"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 쓰레기통 왼쪽: 결제 날짜 -->
+            <TextView
+                android:id="@+id/tv_front_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/text_gray"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_delete_receipt"
+                app:layout_constraintEnd_toStartOf="@+id/btn_delete_receipt"
+                app:layout_constraintTop_toTopOf="@+id/btn_delete_receipt"
+                tools:text="2026. 07. 22" />
+
+            <!-- 상호명 -->
+            <TextView
+                android:id="@+id/tv_front_store"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/text_black"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/tv_front_amount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_front_category_icon"
+                tools:text="스타벅스 노원점" />
+
+            <!-- 구분선 -->
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="#D0D0D0"
+                app:layout_constraintBottom_toTopOf="@+id/tv_front_amount" />
+
+            <!-- 금액 -->
+            <TextView
+                android:id="@+id/tv_front_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="₩ 12,500" />
+
+            <!-- 3.3.2 기부 아이콘 표시 -->
+            <ImageView
+                android:id="@+id/iv_front_donation_badge"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_rating_dot_on"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 카드 뒷면 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_card_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FAF8FF"
+            android:padding="24dp"
+            android:visibility="gone">
+
+            <!-- 가치 태그 -->
+            <TextView
+                android:id="@+id/tv_back_value_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_value_chip_selector"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:textColor="@color/btn_active"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="위로" />
+
+            <!-- 만족도 5단계 -->
+            <LinearLayout
+                android:id="@+id/layout_back_rating_dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/tv_back_memo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_back_value_tag">
+
+                <ImageView
+                    android:id="@+id/dot_1"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_rating_dot_off" />
+
+                <ImageView
+                    android:id="@+id/dot_2"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_rating_dot_off" />
+
+                <ImageView
+                    android:id="@+id/dot_3"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_rating_dot_off" />
+
+                <ImageView
+                    android:id="@+id/dot_4"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_rating_dot_off" />
+
+                <ImageView
+                    android:id="@+id/dot_5"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_rating_dot_off" />
+            </LinearLayout>
+
+            <!-- 짧은 글 (메모) -->
+            <TextView
+                android:id="@+id/tv_back_memo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/text_black"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_back_rating_dots"
+                tools:text="오늘 하루 지친 나에게 선물한 자바칩 프라푸치노! 정말 달콤하고 위로가 되었다." />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</FrameLayout>
