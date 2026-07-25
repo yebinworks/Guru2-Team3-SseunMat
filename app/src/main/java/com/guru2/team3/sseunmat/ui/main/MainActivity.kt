@@ -1,35 +1,58 @@
 package com.guru2.team3.sseunmat.ui.main
 
-// [공통] 바텀 네비게이션 메인 컨테이너 (홈/아카이브/마이페이지 탭)
+// 메인 화면
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.guru2.team3.sseunmat.R
-import com.guru2.team3.sseunmat.ui.write.ReceiptValueWriteActivity
-import com.guru2.team3.sseunmat.ui.write.ReceiptWriteActivity
-import kotlin.jvm.java
+import com.guru2.team3.sseunmat.ui.feed.HomeFeedFragment
+import com.guru2.team3.sseunmat.ui.write.ReceiptModeBottomSheet
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomNav: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // [기능 테스트시 사용] 방금 개발한 Activity로 변경
+        bottomNav = findViewById(R.id.bottom_navigation)
 
-        // AI 인식 입력 테스트 코드 (false: 카메라 모드 / true: 갤러리 모드)
-        val intent = Intent(this, ReceiptWriteActivity::class.java).apply {
-            putExtra("IS_GALLERY_MODE", true)
-            putExtra("EXTRACTED_STORE", "더벤티 노원점")
-            putExtra("EXTRACTED_DATE", "2026. 07. 24")
-            putExtra("EXTRACTED_AMOUNT", 12500L)
+        // 초기 화면 설정 (홈 피드)
+        if (savedInstanceState == null) {
+            replaceFragment(HomeFeedFragment.newInstance())
         }
-        startActivity(intent)
 
-    //        수동 입력 테스트 코드
-//        val intent = Intent(this, ReceiptWriteActivity::class.java).apply {
-//            putExtra("IS_MANUAL_MODE", true)
-//        }
-//        startActivity(intent)
+        setupBottomNavigation()
+    }
+
+    private fun setupBottomNavigation() {
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    replaceFragment(HomeFeedFragment.newInstance())
+                    true
+                }
+                R.id.nav_add -> {
+                    // TODO: ReceiptModeBottomSheet 구현 완료 시 주석 해제
+                    // val bottomSheet = ReceiptModeBottomSheet()
+                    // bottomSheet.show(supportFragmentManager, "ReceiptModeBottomSheet")
+                    false
+                }
+                R.id.nav_archive -> {
+                    // TODO: ArchiveFragment 완성 시 교체
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 }
