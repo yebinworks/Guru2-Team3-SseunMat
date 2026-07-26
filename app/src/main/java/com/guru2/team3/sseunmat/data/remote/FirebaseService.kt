@@ -35,6 +35,13 @@ class FirebaseService {
         }
     }
 
+    // 로그인 처리
+    fun login(email: String, pass: String, onResult: (Boolean) -> Unit) {
+        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
+            onResult(task.isSuccessful)
+        }
+    }
+
     // 영수증 기록 저장
     fun addReceipt(receipt: Receipt, onResult: (Boolean) -> Unit) {
         // TODO: 실제 연동 시 아래 주석 해제하여 현재 로그인 유저 ID 사용

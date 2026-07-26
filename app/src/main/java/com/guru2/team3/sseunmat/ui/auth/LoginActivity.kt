@@ -1,5 +1,7 @@
 package com.guru2.team3.sseunmat.ui.auth
-
+import com.guru2.team3.sseunmat.data.remote.FirebaseService
+import com.guru2.team3.sseunmat.ui.main.MainActivity
+import com.guru2.team3.sseunmat.util.showToast
 // [주은] 1. 로그인
 
 import android.content.Intent
@@ -60,7 +62,26 @@ class LoginActivity : AppCompatActivity() {
             // inputType 변경 시 커서가 맨 앞으로 이동하므로 맨 뒤로 되돌린다
             etUserPassword.setSelection(etUserPassword.text.length)
         }
+// [1.2.2 / 1.2.3] 로그인 처리
+        val firebaseService = FirebaseService()
+        btnLogin.setOnClickListener {
+            val email = etUserEmail.text.toString().trim()
+            val password = etUserPassword.text.toString()
 
+            btnLogin.isEnabled = false  // 중복 클릭 방지
+            firebaseService.login(email, password) { isSuccess ->
+                if (isSuccess) {
+                    // [1.2.2] 로그인 성공 → 홈으로, 이전 화면 스택 제거
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                } else {
+                    // [1.2.3] 로그인 실패 → 안내 문구 (보안상 무엇이 틀렸는지 구분 안 함)
+                    showToast("이메일 또는 비밀번호를 확인해 주세요")
+                    btnLogin.isEnabled = true
+                }
+            }
+        }
         // [1.3.1] 회원가입 화면 이동
         tvGoSignUp.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
