@@ -40,6 +40,7 @@ local.properties
 # Keystore / 서명 파일
 *.jks
 *.keystore
+!debug.keystore
 
 # External native build folder
 .externalNativeBuild
