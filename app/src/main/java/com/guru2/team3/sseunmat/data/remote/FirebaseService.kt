@@ -44,15 +44,11 @@ class FirebaseService {
 
     // 영수증 기록 저장
     fun addReceipt(receipt: Receipt, onResult: (Boolean) -> Unit) {
-        // TODO: 실제 연동 시 아래 주석 해제하여 현재 로그인 유저 ID 사용
-        // val currentUserId = getCurrentUserId()
-        // if (currentUserId.isEmpty()) {
-        //     onResult(false)
-        //     return
-        // }
-
-        // [테스트용] 고정 유저 ID "1" 사용
-        val currentUserId = "1"
+         val currentUserId = getCurrentUserId()
+         if (currentUserId.isEmpty()) {
+             onResult(false)
+             return
+         }
 
         // 문서 ID 미리 생성
         val docRef = db.collection("receipts").document()
@@ -70,8 +66,13 @@ class FirebaseService {
 
     // 이번 달에 등록된 영수증 조회 (3.1.1 & 3.1.2)
     fun getThisMonthReceipts(onResult: (List<Receipt>) -> Unit) {
-        // TODO: 실제 유저 아이디로 추후 변경
-        val currentUserId = "1"
+        val currentUserId = getCurrentUserId()
+
+        if (currentUserId.isEmpty()) {
+            android.util.Log.w("FirebaseService", "조회 취소: 로그인된 유저가 없습니다.")
+            onResult(emptyList())
+            return
+        }
 
         // 이번 달 1일 00:00:00 계산
         val calendar = Calendar.getInstance()

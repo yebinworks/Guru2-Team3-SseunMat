@@ -10,31 +10,41 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- 쓴맛(SseunMat) 메인 포인트 테마 컬러 -->
-    <color name="main_purple">#7E69FF</color>
-    <color name="main_purple_light">#EFEFFF</color>
+    <color name="main_purple">#7186F7</color>
+    <color name="main_purple_light">#E3E7FD</color>
 
     <!-- 버튼 상태 컬러 -->
-    <color name="btn_active">#7E69FF</color>
-    <color name="btn_disabled">#D2D2D2</color>
+    <color name="btn_active">#7186F7</color>
+    <color name="btn_disabled">#E9EAEC</color>
 
     <!-- 텍스트 컬러 -->
     <color name="text_black">#191919</color>
-    <color name="text_gray">#8E8E8E</color>
+    <color name="text_gray">#767676</color>
     <color name="text_light_gray">#B8B8B8</color>
     <color name="text_error">#FF4D4D</color>
 
     <!-- 배경 및 테두리/입력창 컬러 -->
-    <color name="bg_input">#F8F9FA</color>
-    <color name="border_input">#E2E8F0</color>
+    <color name="bg_input">#FFFFFF</color>
+    <color name="border_input">#191919</color>
+    <color name="border_input_error">#FF4D4D</color>
     <color name="bg_card">#FFFFFF</color>
-    <color name="divider">#F1F5F9</color>
+    <color name="divider">#EFEFEF</color>
 
-    <!-- 가치(Value) 카테고리 대표 컬러 (선택 상태 및 그래프용) -->
-    <color name="val_comfort">#FFB7B2</color>   <!-- 위로 -->
-    <color name="val_rest">#FFDAC1</color>      <!-- 휴식 -->
-    <color name="val_relation">#E2F0CB</color>  <!-- 관계 -->
-    <color name="val_memory">#B5EAD7</color>    <!-- 추억 -->
-    <color name="val_learn">#C7CEEA</color>     <!-- 배움 -->
-    <color name="val_inspire">#E0BBE4</color>   <!-- 영감 -->
-    <color name="val_heart">#FEC8D8</color>     <!-- 마음 표현 -->
+    <!-- 가치(Value) 카테고리 대표 컬러 -->
+    <color name="val_comfort">#C99AF8</color>   <!-- 위로 -->
+    <color name="val_rest">#B4F8FF</color>      <!-- 휴식 -->
+    <color name="val_relation">#FF9260</color>  <!-- 관계 -->
+    <color name="val_memory">#FFA66F</color>    <!-- 추억 -->
+    <color name="val_learn">#738DFF</color>     <!-- 배움 -->
+    <color name="val_inspire">#FFCA34</color>   <!-- 영감 -->
+    <color name="val_heart">#FF90A9</color>     <!-- 마음 표현 -->
+
+    <!-- 가치(Value) 영수증 하단 그라데이션 컬러 -->
+    <color name="val_comfort_end">#FDEBE3</color>
+    <color name="val_rest_end">#E6F1F0</color>
+    <color name="val_relation_end">#FDEEDA</color>
+    <color name="val_memory_end">#FDEFDD</color>
+    <color name="val_learn_end">#EBF2FF</color>
+    <color name="val_inspire_end">#FFF0F0</color>
+    <color name="val_heart_end">#F1E7F4</color>
 </resources>

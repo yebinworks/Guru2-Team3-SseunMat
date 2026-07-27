@@ -56,7 +56,12 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
         // 이전 화면 데이터 복원
         store = intent.getStringExtra("STORE") ?: ""
         paymentDateStr = intent.getStringExtra("DATE") ?: ""
-        amount = intent.getLongExtra("AMOUNT", 0L)
+        amount = when (val extra = intent.extras?.get("AMOUNT")) {
+            is Long -> extra
+            is Int -> extra.toLong()
+            is String -> extra.toLongOrNull() ?: 0L
+            else -> 0L
+        }
 
         initViews()
         setupListeners()
@@ -144,8 +149,13 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
     }
 
     private fun saveReceiptToFirestore(memo: String) {
-        val parsedDate = try {
-            SimpleDateFormat("yyyy. MM. dd", Locale.KOREA).parse(paymentDateStr)
+        val parsedDate: Date = try {
+            val cleanDate = paymentDateStr.replace(".", "").replace(" ", "").trim()
+            if (cleanDate.length == 8) {
+                SimpleDateFormat("yyyyMMdd", Locale.KOREA).parse(cleanDate) ?: Date()
+            } else {
+                SimpleDateFormat("yyyy. MM. dd", Locale.KOREA).parse(paymentDateStr) ?: Date()
+            }
         } catch (e: Exception) {
             Date()
         }
@@ -165,9 +175,10 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
         firebaseService.addReceipt(newReceipt) { isSuccess ->
             if (isSuccess) {
                 showToast("영수증이 저장되었습니다.")
+                setResult(RESULT_OK)
                 finish()
             } else {
-                showToast("영수증 저장에 실패했습니다. 다시 시도해 주세요.")
+                showToast("영수증 저장에 실패했습니다. 네트워크 연결을 확인해 주세요.")
                 btnSave.isEnabled = true
             }
         }

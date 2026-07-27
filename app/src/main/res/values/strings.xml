@@ -1,6 +1,4 @@
 <resources>
     <!--고정 텍스트 관리 파일-->
     <string name="app_name">SseunMat</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

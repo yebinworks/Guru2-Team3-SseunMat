@@ -168,11 +168,11 @@ class ReceiptScanActivity : AppCompatActivity() {
                 android.util.Log.d("OpenAISuccess", "결제 날짜(Date)  : $date")
                 android.util.Log.d("OpenAISuccess", "지출 금액(Amount): $amount")
 
-                val intent = Intent(this@ReceiptScanActivity, ReceiptWriteActivity::class.java).apply {
+                val intent = Intent(this@ReceiptScanActivity, ReceiptValueWriteActivity::class.java).apply {
                     putExtra("IS_GALLERY_MODE", isGalleryMode)
-                    putExtra("EXTRACTED_STORE", store)
-                    putExtra("EXTRACTED_DATE", date)
-                    putExtra("EXTRACTED_AMOUNT", amount)
+                    putExtra("STORE", store)
+                    putExtra("DATE", date)
+                    putExtra("AMOUNT", amount.toLong())
                 }
                 startActivity(intent)
                 finish()

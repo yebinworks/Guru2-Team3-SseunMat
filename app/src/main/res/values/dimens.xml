@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 폰트 크기 규격 -->
-    <dimen name="text_size_header">24sp</dimen>      <!-- 큰 제목 / 메인 헤더 -->
-    <dimen name="text_size_title">18sp</dimen>       <!-- 화면 타이틀 / 카드 제목 -->
-    <dimen name="text_size_subtitle">16sp</dimen>    <!-- 서브 타이틀 / 섹션 제목 -->
+    <dimen name="text_size_header">24sp</dimen>      <!-- 메인 타이틀 (예: 쓴 맛, 7월) -->
+    <dimen name="text_size_title">18sp</dimen>       <!-- 화면 헤더 / 회원가입 / 영수증 등록 -->
+    <dimen name="text_size_subtitle">15sp</dimen>    <!-- 입력 폼 라벨 (이메일, 비밀번호 등) -->
     <dimen name="text_size_body">14sp</dimen>        <!-- 일반 본문 / 버튼 / 입력창 -->
-    <dimen name="text_size_small">12sp</dimen>       <!-- 캡션 / 에러 문구 / 날짜 -->
-    <dimen name="text_size_tiny">10sp</dimen>        <!-- 아주 작은 부가 정보 -->
+    <dimen name="text_size_small">12sp</dimen>       <!-- 캡션 / 안내 문구 / 가이드 텍스트 -->
+    <dimen name="text_size_tiny">10sp</dimen>        <!-- 아주 작은 정보 / 날짜 -->
 
     <!-- 여백 및 간격 (Margin & Padding) -->
     <dimen name="spacing_tiny">4dp</dimen>
@@ -19,5 +19,6 @@
     <dimen name="btn_height_primary">52dp</dimen>    <!-- 주요 메인 하단 버튼 높이 -->
     <dimen name="input_box_height">48dp</dimen>      <!-- EditText 입력창 높이 -->
     <dimen name="icon_size_medium">24dp</dimen>      <!-- 기본 아이콘 크기 -->
-    <dimen name="card_corner_radius">12dp</dimen>    <!-- 카드리프 / 입력창 모서리 둥글기 -->
+    <dimen name="card_corner_radius">12dp</dimen>    <!-- 입력창 / 모달 / 카드 둥글기 -->
+    <dimen name="input_corner_radius">8dp</dimen>     <!-- Input 테두리 둥글기 -->
 </resources>

@@ -2,6 +2,7 @@ package com.guru2.team3.sseunmat.ui.feed
 
 // [예빈] 3. 홈 화면 (당월 영수증 피드)
 
+import StackCardPageTransformer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
 import java.util.Calendar
+import androidx.recyclerview.widget.RecyclerView
 
 class HomeFeedFragment : Fragment() {
 
@@ -72,6 +74,15 @@ class HomeFeedFragment : Fragment() {
 
         vpReceiptCards.adapter = cardAdapter
         vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
+
+        vpReceiptCards.offscreenPageLimit = 3
+
+        (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
+            clipChildren = false
+            clipToPadding = false
+        }
+
+        vpReceiptCards.setPageTransformer(StackCardPageTransformer())
 
         vpReceiptCards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

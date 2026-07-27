@@ -1,9 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--공통 테마/스타일 관리 파일-->
-    <!-- Base application theme. -->
     <style name="Base.Theme.SseunMat" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- 메인 브랜드 컬러 세팅 -->
+        <item name="colorPrimary">@color/main_purple</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- 상태바 및 배경색 설정 -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Theme.SseunMat" parent="Base.Theme.SseunMat" />
