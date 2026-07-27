@@ -28,7 +28,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="뒤로가기"
-            android:src="@android:drawable/ic_menu_revert" />
+            android:src="@drawable/ic_custom_revert" />
 
         <TextView
             android:layout_width="0dp"

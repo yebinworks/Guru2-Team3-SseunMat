@@ -100,7 +100,6 @@ class ReceiptScanActivity : AppCompatActivity() {
     private fun initViews() {
         btnBack = findViewById(R.id.btn_back)
         btnReceiptCapture = findViewById(R.id.btn_receipt_capture)
-        btnCancelAnalysis = findViewById(R.id.btn_cancel_analysis)
         layoutCameraGuide = findViewById(R.id.layout_camera_guide)
         layoutAnalysisLoading = findViewById(R.id.layout_analysis_loading)
 

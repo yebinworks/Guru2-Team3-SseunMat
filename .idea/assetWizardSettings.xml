@@ -295,8 +295,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_receipt_empty" />
-                            <entry key="sourceFile" value="C:\Users\admin\Downloads\ic_receipt_empty.svg" />
+                            <entry key="outputName" value="chevron_left" />
+                            <entry key="sourceFile" value="C:\Users\admin\Downloads\Chevron_Left.svg" />
                           </map>
                         </option>
                       </PersistentState>
