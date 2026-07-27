@@ -27,6 +27,17 @@
             android:padding="20dp"
             tools:visibility="visible">
 
+            <!-- 텍스트가 잘 보이도록 반투명 뷰 패널 -->
+            <View
+                android:id="@+id/view_front_overlay"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_white_translucent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <!-- 카테고리 심볼 아이콘 -->
             <ImageView
                 android:id="@+id/iv_front_category_icon"
@@ -118,6 +129,17 @@
             android:padding="20dp"
             android:visibility="gone"
             tools:visibility="invisible">
+
+            <!-- 텍스트가 잘 보이도록 반투명 뷰 패널 -->
+            <View
+                android:id="@+id/view_back_overlay"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_white_translucent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- 1. 왼쪽 상단 가치 태그 -->
             <ImageView

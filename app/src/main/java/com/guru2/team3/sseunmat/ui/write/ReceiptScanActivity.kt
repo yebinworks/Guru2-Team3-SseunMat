@@ -168,7 +168,7 @@ class ReceiptScanActivity : AppCompatActivity() {
                 android.util.Log.d("OpenAISuccess", "결제 날짜(Date)  : $date")
                 android.util.Log.d("OpenAISuccess", "지출 금액(Amount): $amount")
 
-                val intent = Intent(this@ReceiptScanActivity, ReceiptValueWriteActivity::class.java).apply {
+                val intent = Intent(this@ReceiptScanActivity, ReceiptWriteActivity::class.java).apply {
                     putExtra("IS_GALLERY_MODE", isGalleryMode)
                     putExtra("STORE", store)
                     putExtra("DATE", date)
