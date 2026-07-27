@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_receipt_comfort"
-            android:padding="20dp"
             tools:visibility="visible">
 
             <!-- 텍스트가 잘 보이도록 반투명 뷰 패널 -->
@@ -38,86 +37,92 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- 카테고리 심볼 아이콘 -->
-            <ImageView
-                android:id="@+id/iv_front_category_icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="가치 심볼"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_symbol_comfort" />
-
-            <!-- 삭제 아이콘 -->
-            <ImageView
-                android:id="@+id/btn_delete_receipt"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="삭제"
-                android:src="@drawable/ic_delete"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- 결제 날짜 -->
-            <TextView
-                android:id="@+id/tv_front_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:textColor="@color/text_gray"
-                android:textSize="@dimen/text_size_tiny"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_delete_receipt"
-                app:layout_constraintEnd_toStartOf="@+id/btn_delete_receipt"
-                app:layout_constraintTop_toTopOf="@+id/btn_delete_receipt"
-                tools:text="2026. 07. 22" />
-
-            <!-- 상호명 -->
-            <TextView
-                android:id="@+id/tv_front_store"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/text_size_title"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/divider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_front_category_icon"
-                tools:text="상호명" />
-
-            <!-- 점선 구분선 -->
-            <View
-                android:id="@+id/divider"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/divider_dash"
-                android:layerType="software"
-                app:layout_constraintBottom_toTopOf="@+id/tv_front_amount" />
+                android:layout_height="match_parent"
+                android:padding="20dp">
 
-            <!-- 금액 -->
-            <TextView
-                android:id="@+id/tv_front_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/text_size_header"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="₩ 00,000" />
+                <!-- 카테고리 심볼 아이콘 -->
+                <ImageView
+                    android:id="@+id/iv_front_category_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="가치 심볼"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_symbol_comfort" />
 
-            <!-- 기부 아이콘 표시 -->
-            <ImageView
-                android:id="@+id/iv_front_value_dot"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:contentDescription="기부 아이콘"
-                android:src="@drawable/ic_donation"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <!-- 삭제 아이콘 -->
+                <ImageView
+                    android:id="@+id/btn_delete_receipt"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="삭제"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 결제 날짜 -->
+                <TextView
+                    android:id="@+id/tv_front_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_tiny"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_delete_receipt"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_delete_receipt"
+                    app:layout_constraintTop_toTopOf="@+id/btn_delete_receipt"
+                    tools:text="2026. 07. 22" />
+
+                <!-- 상호명 -->
+                <TextView
+                    android:id="@+id/tv_front_store"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_title"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_front_category_icon"
+                    tools:text="상호명" />
+
+                <!-- 점선 구분선 -->
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/divider_dash"
+                    android:layerType="software"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_front_amount" />
+
+                <!-- 금액 -->
+                <TextView
+                    android:id="@+id/tv_front_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_header"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="₩ 00,000" />
+
+                <!-- 기부 아이콘 표시 -->
+                <ImageView
+                    android:id="@+id/iv_front_value_dot"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="기부 아이콘"
+                    android:src="@drawable/ic_donation"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 카드 뒷면 -->
@@ -126,7 +131,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_receipt_comfort"
-            android:padding="20dp"
             android:visibility="gone"
             tools:visibility="invisible">
 
@@ -141,102 +145,106 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- 1. 왼쪽 상단 가치 태그 -->
-            <ImageView
-                android:id="@+id/iv_back_value_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="가치 태그"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_tag_comfort" />
-
-            <!-- 2. 만족도 텍스트 레이블 -->
-            <TextView
-                android:id="@+id/tv_back_rating_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="만족도"
-                android:textColor="@color/text_gray"
-                android:textSize="@dimen/text_size_tiny"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_back_value_tag" />
-
-            <!-- 3. 만족도 점 5개 -->
-            <LinearLayout
-                android:id="@+id/layout_back_rating_dots"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_back_rating_label">
-
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+                <!-- 1. 왼쪽 상단 가치 태그 -->
                 <ImageView
-                    android:id="@+id/dot_1"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_rating_dot_on" />
+                    android:id="@+id/iv_back_value_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="가치 태그"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_tag_comfort" />
 
-                <ImageView
-                    android:id="@+id/dot_2"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_rating_dot_off" />
+                <!-- 2. 만족도 텍스트 레이블 -->
+                <TextView
+                    android:id="@+id/tv_back_rating_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="만족도"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_tiny"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_back_value_tag" />
 
-                <ImageView
-                    android:id="@+id/dot_3"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_rating_dot_off" />
+                <!-- 3. 만족도 점 5개 -->
+                <LinearLayout
+                    android:id="@+id/layout_back_rating_dots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_back_rating_label">
 
-                <ImageView
-                    android:id="@+id/dot_4"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_rating_dot_off" />
+                    <ImageView
+                        android:id="@+id/dot_1"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_rating_dot_on" />
 
-                <ImageView
-                    android:id="@+id/dot_5"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:src="@drawable/ic_rating_dot_off" />
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/dot_2"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_rating_dot_off" />
 
-            <!-- 4. 짧은 글 레이블 -->
-            <TextView
-                android:id="@+id/tv_back_memo_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="짧은 글"
-                android:textColor="@color/text_gray"
-                android:textSize="@dimen/text_size_tiny"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layout_back_rating_dots" />
+                    <ImageView
+                        android:id="@+id/dot_3"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_rating_dot_off" />
 
-            <!-- 5. 짧은 글 본문 -->
-            <TextView
-                android:id="@+id/tv_back_memo"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="6dp"
-                android:ellipsize="end"
-                android:lineSpacingExtra="4dp"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_back_memo_label"
-                tools:text="짧은글 짧은글 짧은글 짧은글 짧은글 짧은글 짧은글 짧은글 짧은글" />
+                    <ImageView
+                        android:id="@+id/dot_4"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_rating_dot_off" />
 
+                    <ImageView
+                        android:id="@+id/dot_5"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/ic_rating_dot_off" />
+                </LinearLayout>
+
+                <!-- 4. 짧은 글 레이블 -->
+                <TextView
+                    android:id="@+id/tv_back_memo_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="짧은 글"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_tiny"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_back_rating_dots" />
+
+                <!-- 5. 짧은 글 본문 -->
+                <TextView
+                    android:id="@+id/tv_back_memo"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="6dp"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_back_memo_label"
+                    tools:text="짧은글 짧은글 짧은글 짧은글 짧은글 짧은글 짧은글 짧은글 짧은글" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
