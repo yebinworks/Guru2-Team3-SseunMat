@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- [주은] -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- [주은] 로그인 화면 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,4 +9,143 @@
     android:layout_height="match_parent"
     tools:context=".ui.auth.LoginActivity">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/spacing_huge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 로고 -->
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="앱 로고" />
+
+        <TextView
+            android:id="@+id/tv_app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="쓴맛"
+            android:textStyle="bold"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_header" />
+
+        <!-- 이메일 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="이메일"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_small" />
+
+        <EditText
+            android:id="@+id/et_user_email"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/input_box_height"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:background="@drawable/bg_input_box"
+            android:paddingHorizontal="@dimen/spacing_medium"
+            android:hint="이메일을 입력해주세요"
+            android:textColor="@color/text_black"
+            android:textColorHint="@color/text_light_gray"
+            android:textSize="@dimen/text_size_body"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+        <!-- 비밀번호 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="비밀번호"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_small" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/input_box_height"
+            android:layout_marginTop="@dimen/spacing_small">
+
+            <EditText
+                android:id="@+id/et_user_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_input_box"
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingEnd="48dp"
+                android:hint="비밀번호를 입력해주세요"
+                android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_gray"
+                android:textSize="@dimen/text_size_body"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <ImageButton
+                android:id="@+id/btn_toggle_password"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/spacing_tiny"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_view"
+                android:contentDescription="비밀번호 보기" />
+        </FrameLayout>
+
+        <!-- 로그인 버튼 -->
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height_primary"
+            android:layout_marginTop="@dimen/spacing_huge"
+            android:background="@drawable/bg_btn_primary"
+            android:text="로그인"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_body"
+            android:stateListAnimator="@null"
+            android:enabled="false" />
+
+        <!-- 구분선 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="28dp"
+            android:text="또는"
+            android:textColor="@color/text_light_gray"
+            android:textSize="@dimen/text_size_small" />
+
+        <!-- 회원가입 이동 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아직 계정이 없나요? "
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:id="@+id/tv_go_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회원가입"
+                android:textColor="@color/main_purple"
+                android:textSize="@dimen/text_size_small" />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
