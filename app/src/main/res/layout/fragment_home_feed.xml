@@ -23,8 +23,8 @@
     <!-- 우측 상단 프로필 버튼 -->
     <ImageView
         android:id="@+id/btn_profile"
-        android:layout_width="@dimen/icon_size_medium"
-        android:layout_height="@dimen/icon_size_medium"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginEnd="@dimen/spacing_large"
         android:contentDescription="프로필"
         android:src="@drawable/ic_profile"

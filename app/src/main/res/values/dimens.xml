@@ -11,14 +11,14 @@
     <!-- 여백 및 간격 (Margin & Padding) -->
     <dimen name="spacing_tiny">4dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
-    <dimen name="spacing_medium">16dp</dimen>
-    <dimen name="spacing_large">20dp</dimen>
-    <dimen name="spacing_huge">24dp</dimen>
+    <dimen name="spacing_medium">20dp</dimen>
+    <dimen name="spacing_large">35dp</dimen>
+    <dimen name="spacing_huge">45dp</dimen>
 
     <!-- 컴포넌트 크기 및 높이 규격 -->
     <dimen name="btn_height_primary">52dp</dimen>    <!-- 주요 메인 하단 버튼 높이 -->
     <dimen name="input_box_height">48dp</dimen>      <!-- EditText 입력창 높이 -->
-    <dimen name="icon_size_medium">24dp</dimen>      <!-- 기본 아이콘 크기 -->
+    <dimen name="icon_size_medium">46dp</dimen>      <!-- 기본 아이콘 크기 -->
     <dimen name="card_corner_radius">12dp</dimen>    <!-- 입력창 / 모달 / 카드 둥글기 -->
     <dimen name="input_corner_radius">8dp</dimen>     <!-- Input 테두리 둥글기 -->
 </resources>
