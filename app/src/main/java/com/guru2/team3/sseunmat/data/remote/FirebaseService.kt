@@ -44,6 +44,7 @@ class FirebaseService {
 
     // 영수증 기록 저장
     fun addReceipt(receipt: Receipt, onResult: (Boolean) -> Unit) {
+        // TODO: 유효성 검사, 예외처리 보강
          val currentUserId = getCurrentUserId()
          if (currentUserId.isEmpty()) {
              onResult(false)

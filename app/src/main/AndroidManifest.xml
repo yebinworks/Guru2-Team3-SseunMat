@@ -23,7 +23,7 @@
         android:theme="@style/Theme.SseunMat">
         <activity
             android:name=".ui.write.ReceiptValueWriteActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.write.ReceiptScanActivity"
             android:exported="false" />
