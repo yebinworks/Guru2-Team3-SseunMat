@@ -2,6 +2,7 @@ package com.guru2.team3.sseunmat.ui.feed
 
 // [예빈] 3. 홈 화면 (당월 영수증 피드)
 
+import StackCardPageTransformer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
 import java.util.Calendar
+import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeFeedFragment : Fragment() {
 
@@ -53,9 +58,8 @@ class HomeFeedFragment : Fragment() {
         vpReceiptCards = view.findViewById(R.id.vp_receipt_cards)
         tvCardIndicator = view.findViewById(R.id.tv_card_indicator)
 
-        // 현재 월 표시 (예: 7월)
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
-        tvCurrentMonth.text = "${currentMonth}월"
+        val sdf = SimpleDateFormat("yyyy. MM", Locale.KOREA)
+        tvCurrentMonth.text = sdf.format(Date())
     }
 
     private fun setupViewPager() {
@@ -72,6 +76,16 @@ class HomeFeedFragment : Fragment() {
 
         vpReceiptCards.adapter = cardAdapter
         vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
+        vpReceiptCards.offscreenPageLimit = 3
+
+        vpReceiptCards.post {
+            (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
+                clipChildren = false
+                clipToPadding = false
+            }
+        }
+
+        vpReceiptCards.setPageTransformer(StackCardPageTransformer())
 
         vpReceiptCards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -88,18 +102,21 @@ class HomeFeedFragment : Fragment() {
         firebaseService.getThisMonthReceipts { receiptList ->
             if (!isAdded) return@getThisMonthReceipts
 
-            if (receiptList.isEmpty()) {
-                // 3.1.3 홈 빈 상태 표시
-                layoutEmptyState.visibility = View.VISIBLE
-                vpReceiptCards.visibility = View.GONE
-                tvCardIndicator.visibility = View.GONE
-            } else {
-                layoutEmptyState.visibility = View.GONE
-                vpReceiptCards.visibility = View.VISIBLE
-                tvCardIndicator.visibility = View.VISIBLE
+            // UI 갱신은 메인 스레드에서 처리
+            activity?.runOnUiThread {
+                if (receiptList.isEmpty()) {
+                    layoutEmptyState.visibility = View.VISIBLE
+                    vpReceiptCards.visibility = View.GONE
+                    tvCardIndicator.visibility = View.GONE
+                } else {
+                    layoutEmptyState.visibility = View.GONE
+                    vpReceiptCards.visibility = View.VISIBLE
+                    tvCardIndicator.visibility = View.VISIBLE
 
-                cardAdapter.updateData(receiptList)
-                tvCardIndicator.text = "1 / ${receiptList.size}"
+                    cardAdapter.updateData(receiptList)
+                    val currentPos = vpReceiptCards.currentItem
+                    tvCardIndicator.text = "${currentPos + 1} / ${receiptList.size}"
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,26 +24,42 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // [0.1.1] 저장된 인증 정보 확인 후 분기
-        // 로고/로딩 표시를 위해 1초 뒤 이동한다
         Handler(Looper.getMainLooper()).postDelayed({
-            val isLoggedIn = firebaseService.getCurrentUserId().isNotEmpty()
+            navigateToNextScreen()
+        }, 1000)
+    }
+
+    private fun navigateToNextScreen() {
+        try {
+            val userId = firebaseService.getCurrentUserId()
+            val isLoggedIn = !userId.isNullOrEmpty()
 
             val nextActivity = if (isLoggedIn) {
-                MainActivity::class.java   // 유효한 인증 정보 있음 → 홈
+                MainActivity::class.java
             } else {
-                LoginActivity::class.java  // 없음/만료 → 로그인
+                LoginActivity::class.java
             }
 
-            val intent = Intent(this, nextActivity)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            val intent = Intent(this, nextActivity).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             startActivity(intent)
-        }, 1000)
+            finish()
+        } catch (e: Exception) {
+            Log.e("SplashActivity", "화면 전환 실패: ${e.message}", e)
+            // 예외 발생 시 기본적으로 로그인 화면으로 안전 이동
+            val intent = Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+        }
     }
 }

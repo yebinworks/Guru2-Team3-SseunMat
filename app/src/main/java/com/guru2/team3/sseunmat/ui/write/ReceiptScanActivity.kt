@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -18,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -27,36 +29,43 @@ import com.guru2.team3.sseunmat.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
-// 5. 영수증 스캔 및 AI 분석 화면
+// 5. 영수증 스캔 및 AI 분석 화면 (촬영 가이드 화면)
 class ReceiptScanActivity : AppCompatActivity() {
 
     private lateinit var btnBack: ImageView
     private lateinit var btnReceiptCapture: Button
-    private lateinit var btnCancelAnalysis: Button
     private lateinit var layoutCameraGuide: LinearLayout
     private lateinit var layoutAnalysisLoading: LinearLayout
 
     private val openAIService = OpenAIService()
     private var isGalleryMode = false
+    private var photoUri: Uri? = null
+    private var photoFile: File? = null
 
-    // 카메라 촬영 결과 받아오기
-    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val bitmap = result.data?.extras?.get("data") as? Bitmap
-            if (bitmap != null) {
-                analyzeImageWithOpenAI(bitmap)
-            } else {
-                showToast("이미지를 불러오지 못했습니다. 직접 입력 화면으로 이동합니다.")
-                navigateToManualWrite()
+    // 원본 카메라 촬영 결과 받아오기
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+        if (isSuccess && photoUri != null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val bitmap = getBitmapFromUri(photoUri!!)
+                withContext(Dispatchers.Main) {
+                    if (bitmap != null) {
+                        analyzeImageWithOpenAI(bitmap)
+                    } else {
+                        showToast("이미지를 불러오지 못했습니다. 직접 입력 화면으로 이동합니다.")
+                        navigateToManualWrite()
+                    }
+                }
             }
+        } else {
+            Log.d("ReceiptScan", "카메라 촬영이 취소되었습니다.")
         }
     }
 
     // 갤러리 이미지 선택 결과 받아오기
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            // 갤러리 이미지 로딩 시 메인 스레드가 멈추지 않도록 IO 스레드에서 백그라운드로 처리
             lifecycleScope.launch(Dispatchers.IO) {
                 val bitmap = getBitmapFromUri(it)
                 withContext(Dispatchers.Main) {
@@ -100,40 +109,35 @@ class ReceiptScanActivity : AppCompatActivity() {
     private fun initViews() {
         btnBack = findViewById(R.id.btn_back)
         btnReceiptCapture = findViewById(R.id.btn_receipt_capture)
-        btnCancelAnalysis = findViewById(R.id.btn_cancel_analysis)
         layoutCameraGuide = findViewById(R.id.layout_camera_guide)
         layoutAnalysisLoading = findViewById(R.id.layout_analysis_loading)
 
+        // 모드에 맞춰 버튼 텍스트 변경
         if (isGalleryMode) {
             btnReceiptCapture.text = "갤러리에서 사진 선택하기"
+        } else {
+            btnReceiptCapture.text = "영수증 촬영하기"
         }
     }
 
     private fun setupListeners() {
         btnBack.setOnClickListener { finish() }
 
+        // 하단 버튼 클릭 시 권한 확인 후 카메라/갤러리 실행
         btnReceiptCapture.setOnClickListener {
             if (layoutAnalysisLoading.visibility == View.VISIBLE) return@setOnClickListener
             checkPermissionAndProceed()
         }
-
-        btnCancelAnalysis.setOnClickListener {
-            layoutAnalysisLoading.visibility = View.GONE
-            layoutCameraGuide.visibility = View.VISIBLE
-        }
     }
 
     private fun checkPermissionAndProceed() {
-        val permission = if (isGalleryMode) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Manifest.permission.READ_MEDIA_IMAGES
-            } else {
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            }
-        } else {
-            Manifest.permission.CAMERA
+        // 갤러리 모드는 Photo Picker 사용으로 별도 권한 없이 가능, 카메라 모드만 권한 체크
+        if (isGalleryMode) {
+            startImagePickOrCapture()
+            return
         }
 
+        val permission = Manifest.permission.CAMERA
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
             startImagePickOrCapture()
         } else {
@@ -145,10 +149,21 @@ class ReceiptScanActivity : AppCompatActivity() {
         if (isGalleryMode) {
             galleryLauncher.launch("image/*")
         } else {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             try {
-                cameraLauncher.launch(takePictureIntent)
+                // 원본 사진을 저장할 임시 파일 생성
+                photoFile = File.createTempFile("receipt_", ".jpg", cacheDir).apply {
+                    createNewFile()
+                }
+                photoUri = FileProvider.getUriForFile(
+                    this,
+                    "${applicationContext.packageName}.fileprovider",
+                    photoFile!!
+                )
+
+                // Intent 생성 없이 photoUri를 직접 넘겨서 카메라 실행
+                cameraLauncher.launch(photoUri!!)
             } catch (e: Exception) {
+                Log.e("ReceiptScan", "카메라 준비 중 오류 발생", e)
                 showToast("카메라를 실행할 수 없습니다.")
             }
         }
@@ -164,21 +179,16 @@ class ReceiptScanActivity : AppCompatActivity() {
             layoutAnalysisLoading.visibility = View.GONE
 
             result.onSuccess { (store, date, amount) ->
-                android.util.Log.d("OpenAISuccess", "상호명(Store) : $store")
-                android.util.Log.d("OpenAISuccess", "결제 날짜(Date)  : $date")
-                android.util.Log.d("OpenAISuccess", "지출 금액(Amount): $amount")
-
                 val intent = Intent(this@ReceiptScanActivity, ReceiptWriteActivity::class.java).apply {
                     putExtra("IS_GALLERY_MODE", isGalleryMode)
-                    putExtra("EXTRACTED_STORE", store)
-                    putExtra("EXTRACTED_DATE", date)
-                    putExtra("EXTRACTED_AMOUNT", amount)
+                    putExtra("STORE", store)
+                    putExtra("DATE", date)
+                    putExtra("AMOUNT", amount) // amount가 이미 Long이므로 중복 toLong() 제거
                 }
                 startActivity(intent)
                 finish()
             }.onFailure { error ->
-                // 디버깅용 로그 출력
-                android.util.Log.e("OpenAIFailure", "분석 실패 이유: ${error.message}", error)
+                Log.e("OpenAIError", "OpenAI 호출 실패 원인: ${error.localizedMessage}", error)
                 showToast("영수증 정보를 정확히 읽지 못했어요. 직접 입력해 주세요.")
                 navigateToManualWrite()
             }
@@ -196,7 +206,7 @@ class ReceiptScanActivity : AppCompatActivity() {
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(this)
             .setTitle("권한 필요 안내")
-            .setMessage("영수증 스캔 기능을 사용하려면 접근 권한 허용이 필요합니다.")
+            .setMessage("영수증을 촬영하려면 카메라 접근 권한이 필요합니다.")
             .setPositiveButton("확인", null)
             .show()
     }
@@ -204,12 +214,16 @@ class ReceiptScanActivity : AppCompatActivity() {
     private fun getBitmapFromUri(uri: Uri): Bitmap? {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri)) { decoder, _, _ ->
+                    decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                    decoder.isMutableRequired = true
+                }
             } else {
                 @Suppress("DEPRECATION")
                 MediaStore.Images.Media.getBitmap(contentResolver, uri)
             }
         } catch (e: Exception) {
+            Log.e("ReceiptScan", "Bitmap 생성 오류", e)
             null
         }
     }

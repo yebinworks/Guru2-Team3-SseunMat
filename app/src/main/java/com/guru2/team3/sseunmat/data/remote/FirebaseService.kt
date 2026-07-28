@@ -44,15 +44,12 @@ class FirebaseService {
 
     // 영수증 기록 저장
     fun addReceipt(receipt: Receipt, onResult: (Boolean) -> Unit) {
-        // TODO: 실제 연동 시 아래 주석 해제하여 현재 로그인 유저 ID 사용
-        // val currentUserId = getCurrentUserId()
-        // if (currentUserId.isEmpty()) {
-        //     onResult(false)
-        //     return
-        // }
-
-        // [테스트용] 고정 유저 ID "1" 사용
-        val currentUserId = "1"
+        // TODO: 유효성 검사, 예외처리 보강
+         val currentUserId = getCurrentUserId()
+         if (currentUserId.isEmpty()) {
+             onResult(false)
+             return
+         }
 
         // 문서 ID 미리 생성
         val docRef = db.collection("receipts").document()
@@ -70,15 +67,22 @@ class FirebaseService {
 
     // 이번 달에 등록된 영수증 조회 (3.1.1 & 3.1.2)
     fun getThisMonthReceipts(onResult: (List<Receipt>) -> Unit) {
-        // TODO: 실제 유저 아이디로 추후 변경
-        val currentUserId = "1"
+        val currentUserId = getCurrentUserId()
 
-        // 이번 달 1일 00:00:00 계산
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
+        if (currentUserId.isEmpty()) {
+            android.util.Log.w("FirebaseService", "조회 취소: 로그인된 유저가 없습니다.")
+            onResult(emptyList())
+            return
+        }
+
+        // 이번 달 1일 00:00:00.000 계산
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
         val startOfMonth = calendar.time
 
         db.collection("receipts")
@@ -88,14 +92,17 @@ class FirebaseService {
             .addOnSuccessListener { querySnapshot ->
                 val list = querySnapshot.toObjects(Receipt::class.java)
 
-                // 3.1.2 정렬: 결제 날짜 내림차순 -> createdAt 내림차순
+                // 정렬: 결제 날짜 내림차순 -> createdAt 내림차순
                 val sortedList = list.sortedWith(
                     compareByDescending<Receipt> { it.paymentDate }
                         .thenByDescending { it.createdAt }
                 )
+                android.util.Log.d("FirebaseService", "조회 성공: ${sortedList.size}개 검색됨")
                 onResult(sortedList)
             }
-            .addOnFailureListener {
+            .addOnFailureListener { exception ->
+                // 쿼리 실패 원인 로그 출력 (Index 미생성 등의 원인 파악용)
+                android.util.Log.e("FirebaseService", "영수증 불러오기 실패: ${exception.message}", exception)
                 onResult(emptyList())
             }
     }

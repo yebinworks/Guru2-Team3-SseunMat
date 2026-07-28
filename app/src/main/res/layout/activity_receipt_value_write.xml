@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[예빈]-->
+<!-- [예빈] 6.4~6.7 가치 선택 및 세부 입력 화면 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/white"
     tools:context=".ui.write.ReceiptValueWriteActivity">
 
     <!-- 상단 헤더 -->
@@ -16,9 +16,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="12dp"
+        android:paddingHorizontal="@dimen/spacing_medium"
+        android:paddingVertical="@dimen/spacing_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,7 +27,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="뒤로가기"
-            android:src="@android:drawable/ic_menu_revert" />
+            android:src="@drawable/ic_custom_revert"
+            app:tint="@color/text_black" />
 
         <TextView
             android:layout_width="0dp"
@@ -58,123 +58,119 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingHorizontal="@dimen/spacing_medium"
+            android:paddingVertical="@dimen/spacing_small">
 
-            <!-- 6.4 가치 선택 -->
+            <!-- 6.4 가치 선택 타이틀 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:lineSpacingExtra="4dp"
                 android:text="이 소비가 내게 남긴 가치를\n하나 선택해 주세요."
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_header"
                 android:textStyle="bold" />
 
-            <!-- 7가지 가치 그리드/플로우 레이아웃 -->
+            <!-- 7가지 가치 이미지 버튼 그리드 -->
             <GridLayout
                 android:id="@+id/grid_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:columnCount="3">
 
-                <!-- 위로, 휴식, 관계, 추억, 배움, 영감, 마음 표현 -->
-                <Button
+                <!-- 1. 위로 -->
+                <ImageButton
                     android:id="@+id/btn_val_consolation"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="위로"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="위로"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_consolation_on" />
 
-                <Button
+                <!-- 2. 휴식 -->
+                <ImageButton
                     android:id="@+id/btn_val_rest"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="휴식"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="휴식"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_rest_off" />
 
-                <Button
+                <!-- 3. 관계 -->
+                <ImageButton
                     android:id="@+id/btn_val_relation"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="관계"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="관계"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_relation_off" />
 
-                <Button
+                <!-- 4. 추억 -->
+                <ImageButton
                     android:id="@+id/btn_val_memory"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="추억"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="추억"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_memory_off" />
 
-                <Button
+                <!-- 5. 배움 -->
+                <ImageButton
                     android:id="@+id/btn_val_learning"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="배움"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="배움"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_learning_off" />
 
-                <Button
+                <!-- 6. 영감 -->
+                <ImageButton
                     android:id="@+id/btn_val_inspiration"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="영감"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="영감"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_inspiration_off" />
 
-                <Button
+                <!-- 7. 마음표현 -->
+                <ImageButton
                     android:id="@+id/btn_val_expression"
-                    style="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="100dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    android:background="@drawable/bg_value_chip_selector"
-                    android:text="마음\n표현"
-                    android:textColor="@color/selector_value_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="마음표현"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_val_expression_off" />
             </GridLayout>
 
-            <!-- 6.5 만족도 입력 (5단계 척도) -->
+            <!-- 6.5 만족도 입력 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:lineSpacingExtra="4dp"
                 android:text="이 소비가 내게 얼마나\n좋은 경험으로 남았나요?"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_header"
@@ -184,7 +180,7 @@
                 android:id="@+id/layout_rating_dots"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -222,11 +218,12 @@
                     android:src="@drawable/ic_rating_dot_off" />
             </LinearLayout>
 
-            <!-- 6.6 짧은 글 -->
+            <!-- 6.6 짧은 글 메모 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:lineSpacingExtra="4dp"
                 android:text="이 소비로\n남은 감정이나 기억이 있나요?"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_header"
@@ -236,19 +233,20 @@
                 android:id="@+id/et_memo"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:background="@drawable/bg_input_box"
                 android:gravity="top|start"
                 android:hint="남기고 싶은 감정이나 기억을 적어 주세요"
                 android:inputType="textMultiLine"
-                android:padding="12dp"
+                android:padding="14dp"
                 android:textColor="@color/text_black"
+                android:textColorHint="@color/text_light_gray"
                 android:textSize="@dimen/text_size_body" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="@dimen/spacing_tiny"
                 android:text="100자 이내로 작성해주세요"
                 android:textColor="@color/text_gray"
                 android:textSize="@dimen/text_size_small" />
@@ -257,7 +255,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="@dimen/spacing_large"
                 android:text="이 소비는 기부였나요?"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_header"
@@ -266,7 +264,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/spacing_tiny"
                 android:text="기부 기록이라면 선택해 주세요"
                 android:textColor="@color/text_gray"
                 android:textSize="@dimen/text_size_body" />
@@ -275,7 +273,7 @@
                 android:id="@+id/cb_donation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:text="  기부로 기록하기"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_body" />
@@ -283,18 +281,20 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 영수증 저장하기 버튼 -->
+    <!-- 영수증 저장/등록 버튼 -->
     <Button
         android:id="@+id/btn_save"
         android:layout_width="0dp"
         android:layout_height="@dimen/btn_height_primary"
-        android:layout_margin="20dp"
+        android:layout_marginHorizontal="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_small"
         android:backgroundTint="@color/btn_disabled"
         android:enabled="false"
-        android:text="영수증 저장하기"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_body"
+        android:text="영수증 등록하기"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_subtitle"
         android:textStyle="bold"
+        app:cornerRadius="@dimen/input_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

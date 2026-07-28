@@ -80,9 +80,10 @@ class ReceiptWriteActivity : AppCompatActivity() {
     private fun loadIntentDataDataAndSetupUI() {
         val isManualMode = intent.getBooleanExtra("IS_MANUAL_MODE", false)
         isGalleryMode = intent.getBooleanExtra("IS_GALLERY_MODE", false)
-        val extractedStore = intent.getStringExtra("EXTRACTED_STORE") ?: ""
-        val extractedDate = intent.getStringExtra("EXTRACTED_DATE") ?: ""
-        val extractedAmount = intent.getLongExtra("EXTRACTED_AMOUNT", 0L)
+
+        val extractedStore = intent.getStringExtra("STORE") ?: ""
+        val extractedDate = intent.getStringExtra("DATE") ?: ""
+        val extractedAmount = intent.getLongExtra("AMOUNT", 0L)
 
         val isFullyExtracted = extractedStore.isNotBlank() && extractedDate.isNotBlank() && extractedAmount > 0L
 
@@ -186,10 +187,15 @@ class ReceiptWriteActivity : AppCompatActivity() {
         btnNext.setOnClickListener {
             val store = etStore.text.toString().trim()
             val date = etDate.text.toString().trim()
-            // 💡 콤마 포함 텍스트 대신 순수 Long인 rawAmount 사용
             val amount = rawAmount
+            showToast("영수증 정보 입력이 완료되었습니다.")
 
-            showToast("영수증 정보 입력이 완료되었습니다. ($amount 원)")
+            val intent = Intent(this, ReceiptValueWriteActivity::class.java).apply {
+                putExtra("STORE", store)
+                putExtra("DATE", date)
+                putExtra("AMOUNT", amount)
+            }
+            startActivity(intent)
         }
     }
 

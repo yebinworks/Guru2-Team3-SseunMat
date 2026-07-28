@@ -1,25 +1,37 @@
 package com.guru2.team3.sseunmat.ui.write
 
-//[예빈]
+// [예빈] 6.4~6.7 가치 선택 및 등록 처리 액티비티
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.model.Receipt
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
+import com.guru2.team3.sseunmat.ui.main.MainActivity
 import com.guru2.team3.sseunmat.util.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+// 가치 버튼 아이템 래퍼 데이터 클래스
+private data class ValueButtonItem(
+    val button: ImageButton,
+    val valueName: String,
+    val offRes: Int,
+    val onRes: Int
+)
 
 class ReceiptValueWriteActivity : AppCompatActivity() {
 
@@ -28,7 +40,7 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
     private lateinit var cbDonation: CheckBox
     private lateinit var btnSave: Button
 
-    private lateinit var valueButtons: List<Button>
+    private lateinit var valueItems: List<ValueButtonItem>
     private lateinit var ratingDots: List<ImageView>
 
     private val firebaseService = FirebaseService()
@@ -38,7 +50,7 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
     private var paymentDateStr: String = ""
     private var amount: Long = 0L
 
-    // 가치 입력 데이터
+    // 가치 및 만족도 입력 데이터
     private var selectedValue: String = ""
     private var selectedRating: Int = 0 // 1~5 (0은 미선택)
 
@@ -56,7 +68,12 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
         // 이전 화면 데이터 복원
         store = intent.getStringExtra("STORE") ?: ""
         paymentDateStr = intent.getStringExtra("DATE") ?: ""
-        amount = intent.getLongExtra("AMOUNT", 0L)
+        amount = when (val extra = intent.extras?.get("AMOUNT")) {
+            is Long -> extra
+            is Int -> extra.toLong()
+            is String -> extra.toLongOrNull() ?: 0L
+            else -> 0L
+        }
 
         initViews()
         setupListeners()
@@ -69,14 +86,15 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
         cbDonation = findViewById(R.id.cb_donation)
         btnSave = findViewById(R.id.btn_save)
 
-        valueButtons = listOf(
-            findViewById(R.id.btn_val_consolation),
-            findViewById(R.id.btn_val_rest),
-            findViewById(R.id.btn_val_relation),
-            findViewById(R.id.btn_val_memory),
-            findViewById(R.id.btn_val_learning),
-            findViewById(R.id.btn_val_inspiration),
-            findViewById(R.id.btn_val_expression)
+        // 가치 버튼과 이미지 자원을 1:1 매핑
+        valueItems = listOf(
+            ValueButtonItem(findViewById(R.id.btn_val_consolation), "위로", R.drawable.btn_val_consolation_on, R.drawable.btn_val_consolation_off),
+            ValueButtonItem(findViewById(R.id.btn_val_rest), "휴식", R.drawable.btn_val_rest_off, R.drawable.btn_val_rest_on),
+            ValueButtonItem(findViewById(R.id.btn_val_relation), "관계", R.drawable.btn_val_relation_off, R.drawable.btn_val_relation_on),
+            ValueButtonItem(findViewById(R.id.btn_val_memory), "추억", R.drawable.btn_val_memory_off, R.drawable.btn_val_memory_on),
+            ValueButtonItem(findViewById(R.id.btn_val_learning), "배움", R.drawable.btn_val_learning_off, R.drawable.btn_val_learning_on),
+            ValueButtonItem(findViewById(R.id.btn_val_inspiration), "영감", R.drawable.btn_val_inspiration_off, R.drawable.btn_val_inspiration_on),
+            ValueButtonItem(findViewById(R.id.btn_val_expression), "마음 표현", R.drawable.btn_val_expression_off, R.drawable.btn_val_expression_on)
         )
 
         ratingDots = listOf(
@@ -91,12 +109,19 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
     private fun setupListeners() {
         btnBack.setOnClickListener { showExitDialog() }
 
-        // 6.4.2 가치 단일 선택
-        valueButtons.forEach { button ->
-            button.setOnClickListener { clickedBtn ->
-                valueButtons.forEach { it.isSelected = false }
-                clickedBtn.isSelected = true
-                selectedValue = (clickedBtn as Button).text.toString().replace("\n", " ")
+        // 6.4.2 가치 단일 선택 (이미지 스위칭 방식)
+        valueItems.forEach { targetItem ->
+            targetItem.button.setOnClickListener {
+                // 1. 모든 버튼을 off 이미지로 초기화
+                valueItems.forEach { item ->
+                    item.button.setImageResource(item.offRes)
+                }
+
+                // 2. 현재 선택된 버튼만 on 이미지로 변경
+                targetItem.button.setImageResource(targetItem.onRes)
+
+                // 3. 가치 데이터 저장 및 유효성 검사
+                selectedValue = targetItem.valueName
                 validateInputs()
             }
         }
@@ -135,17 +160,23 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
     }
 
     private fun validateInputs() {
-        // 가치와 만족도가 모두 선택되어야 저장 버튼 활성화
+        // 가치와 만족도가 모두 선택되어야 등록 버튼 활성화
         val isValid = selectedValue.isNotEmpty() && selectedRating > 0
         btnSave.isEnabled = isValid
-        btnSave.backgroundTintList = getColorStateList(
-            if (isValid) R.color.btn_active else R.color.btn_disabled
+        btnSave.backgroundTintList = ContextCompat.getColorStateList(
+            this,
+            if (isValid) R.color.main_purple else R.color.btn_disabled
         )
     }
 
     private fun saveReceiptToFirestore(memo: String) {
-        val parsedDate = try {
-            SimpleDateFormat("yyyy. MM. dd", Locale.KOREA).parse(paymentDateStr)
+        val parsedDate: Date = try {
+            val cleanDate = paymentDateStr.replace(".", "").replace(" ", "").trim()
+            if (cleanDate.length == 8) {
+                SimpleDateFormat("yyyyMMdd", Locale.KOREA).parse(cleanDate) ?: Date()
+            } else {
+                SimpleDateFormat("yyyy. MM. dd", Locale.KOREA).parse(paymentDateStr) ?: Date()
+            }
         } catch (e: Exception) {
             Date()
         }
@@ -165,9 +196,15 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
         firebaseService.addReceipt(newReceipt) { isSuccess ->
             if (isSuccess) {
                 showToast("영수증이 저장되었습니다.")
+
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+
+                startActivity(intent)
                 finish()
             } else {
-                showToast("영수증 저장에 실패했습니다. 다시 시도해 주세요.")
+                showToast("영수증 저장에 실패했습니다. 네트워크 연결을 확인해 주세요.")
                 btnSave.isEnabled = true
             }
         }

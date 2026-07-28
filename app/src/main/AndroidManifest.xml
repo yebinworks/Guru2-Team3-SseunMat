@@ -23,7 +23,7 @@
         android:theme="@style/Theme.SseunMat">
         <activity
             android:name=".ui.write.ReceiptValueWriteActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.write.ReceiptScanActivity"
             android:exported="false" />
@@ -52,6 +52,15 @@
             android:exported="true">
 
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -4,33 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/white">
 
-    <!-- 상단 월 표시 및 프로필 -->
+    <!-- 상단 월 표시 (예: 7월) -->
     <TextView
         android:id="@+id/tv_current_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_large"
         android:textColor="@color/text_black"
-        android:textSize="28sp"
+        android:textSize="@dimen/text_size_header"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="7월" />
+        tools:text="2026. 07" />
 
+    <!-- 우측 상단 프로필 버튼 -->
     <ImageView
         android:id="@+id/btn_profile"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="20dp"
-        android:src="@android:drawable/ic_menu_myplaces"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:contentDescription="프로필"
+        android:src="@drawable/ic_profile"
         app:layout_constraintBottom_toBottomOf="@+id/tv_current_month"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_current_month" />
 
-    <!-- 홈 빈 상태 -->
+    <!-- 홈 빈 상태 (영수증이 없을 때) -->
     <LinearLayout
         android:id="@+id/layout_empty_state"
         android:layout_width="wrap_content"
@@ -41,58 +43,62 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="빈 영수증"
+            android:src="@drawable/ic_receipt_empty" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_large"
             android:text="이번 달에 남긴 영수증이 없어요"
             android:textColor="@color/text_black"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/spacing_small"
             android:text="첫 번째 가치 영수증을 기록해 보세요!"
             android:textColor="@color/text_gray"
-            android:textSize="14sp" />
+            android:textSize="@dimen/text_size_body" />
     </LinearLayout>
 
-    <!-- 하단 카드 인디케이터 (3 / 12) - 위치 고정 -->
-    <TextView
-        android:id="@+id/tv_card_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_value_chip_selector"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="6dp"
-        android:textColor="@color/text_black"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="1 / 3" />
-
-    <!-- 세로 카드 ViewPager2 (상단 월 텍스트 ~ 하단 인디케이터 사이 채우기) -->
+    <!-- 세로 카드 ViewPager2 -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_receipt_cards"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_small"
         android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/tv_card_indicator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_current_month" />
+
+    <!-- 하단 카드 인디케이터 (5 / 9) -->
+    <TextView
+        android:id="@+id/tv_card_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:background="@drawable/bg_indicator_chip"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="6dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="5 / 9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
