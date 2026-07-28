@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -33,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
             enableEdgeToEdge()
             setContentView(R.layout.activity_login)
 
-            val mainView = findViewById<TextView>(R.id.main) ?: findViewById(android.R.id.content)
+            val mainView = findViewById<View>(R.id.main) ?: findViewById(android.R.id.content)
             mainView?.let { v ->
                 ViewCompat.setOnApplyWindowInsetsListener(v) { view, insets ->
                     val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
