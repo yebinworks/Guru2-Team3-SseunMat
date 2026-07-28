@@ -1,98 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[예빈]-->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- [예빈] 7. 가치 아카이브 메인 화면 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fillViewport="true">
+    android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <!-- 상단 타이틀 -->
+    <TextView
+        android:id="@+id/tv_header_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:layout_marginTop="@dimen/spacing_large"
+        android:text="아카이브"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_header"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- 7.1.1 이번 달 기준 표시 (예: 2026. 07) -->
+    <!-- btn_profile -->
+    <ImageView
+        android:id="@+id/btn_profile"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:contentDescription="프로필"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_header_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_header_title" />
+
+    <!-- 월 표시 영역 (상단 타이틀 아래 배치) -->
+    <LinearLayout
+        android:id="@+id/layout_date_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_header_title">
+
         <TextView
             android:id="@+id/tv_archive_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             android:textColor="@color/text_black"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="2026. 07" />
+    </LinearLayout>
 
-        <!-- 7.1.2 당월 빈 상태 (Empty View) -->
+    <!-- 메인 콘텐츠 스크롤뷰 -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_archive_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_date_selector">
+
         <LinearLayout
-            android:id="@+id/layout_archive_empty"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+            android:paddingHorizontal="@dimen/spacing_medium"
+            android:paddingBottom="24dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="이달에는 아직 기록된 가치가 없어요."
+                android:text="이번달의 가치를 요약했어요!"
                 android:textColor="@color/text_black"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_subtitle"
                 android:textStyle="bold" />
-        </LinearLayout>
 
-        <!-- 데이터 존재 시 보여줄 요약 컨테이너 -->
-        <LinearLayout
-            android:id="@+id/layout_archive_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/tv_archive_date">
-
-            <!-- 7.2.2 대표 가치 표시 문구 -->
-            <TextView
-                android:id="@+id/tv_top_value_summary"
+            <!-- 통에셋 카드 -->
+            <FrameLayout
+                android:id="@+id/card_top_value"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F5F3FF"
-                android:padding="16dp"
-                android:textColor="@color/btn_active"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="이번 달 가장 많이 남은 가치는 '관계'였어요." />
-
-            <!-- 7.2.3 당월 평균 만족도 -->
-            <TextView
-                android:id="@+id/tv_average_rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="160dp"
                 android:layout_marginTop="12dp"
-                android:textColor="@color/text_black"
-                android:textSize="15sp"
-                tools:text="이번 달 평균 만족도 : 4.2점" />
+                android:background="@drawable/card_bg_comfort">
 
-            <!-- 7.2.1 가치별 횟수 리사이클러뷰 (그래프/목록) -->
+                <!-- 하단 만족도 도트 & 기간 칩 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp"
+                    android:paddingBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="이번달 평균 만족도"
+                            android:textColor="#666666"
+                            android:textSize="12sp" />
+
+                        <!-- 5개 ImageView 만족도 점 레이아웃 -->
+                        <LinearLayout
+                            android:id="@+id/layout_rating_dots"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/dot_1"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:src="@drawable/ic_rating_dot_off" />
+
+                            <ImageView
+                                android:id="@+id/dot_2"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:src="@drawable/ic_rating_dot_off" />
+
+                            <ImageView
+                                android:id="@+id/dot_3"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:src="@drawable/ic_rating_dot_off" />
+
+                            <ImageView
+                                android:id="@+id/dot_4"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:src="@drawable/ic_rating_dot_off" />
+
+                            <ImageView
+                                android:id="@+id/dot_5"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:src="@drawable/ic_rating_dot_off" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- 기간 표시 칩 -->
+                    <TextView
+                        android:id="@+id/tv_date_range_chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_date_chip"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="7dp"
+                        android:textColor="#4A5056"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="07. 01 ~ 07. 22" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="12dp"
+                android:text="가치별 빈도"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_subtitle"
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_value_graph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="7"
+                tools:listitem="@layout/item_value_graph" />
 
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    <!-- 빈 상태 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/layout_archive_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_date_selector">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="기록 없음"
+            android:src="@drawable/ic_archive_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="이달에는 아직 기록된 가치가 없어요"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="당신의 소비가 남긴 감정과 가치를\n기록해 보세요!"
+            android:textColor="@color/text_gray"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

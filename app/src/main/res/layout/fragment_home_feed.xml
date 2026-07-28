@@ -18,7 +18,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="7월" />
+        tools:text="2026. 07" />
 
     <!-- 우측 상단 프로필 버튼 -->
     <ImageView

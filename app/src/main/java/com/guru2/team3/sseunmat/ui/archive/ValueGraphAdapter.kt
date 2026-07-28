@@ -5,6 +5,7 @@ package com.guru2.team3.sseunmat.ui.archive
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,6 @@ class ValueGraphAdapter(
     private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<ValueGraphAdapter.ValueGraphViewHolder>() {
 
-    // 전체 가치 중 최다 기록 횟수 (게이지 100% 기준)
     private var maxCount: Int = 1
 
     init {
@@ -49,6 +49,7 @@ class ValueGraphAdapter(
     override fun getItemCount(): Int = itemList.size
 
     inner class ValueGraphViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val ivValueSymbol: ImageView = itemView.findViewById(R.id.iv_value_symbol)
         private val tvValueName: TextView = itemView.findViewById(R.id.tv_value_name)
         private val tvValueCount: TextView = itemView.findViewById(R.id.tv_value_count)
         private val progressValue: ProgressBar = itemView.findViewById(R.id.progress_value)
@@ -57,11 +58,22 @@ class ValueGraphAdapter(
             tvValueName.text = item.valueName
             tvValueCount.text = "기록 ${item.count}개"
 
-            // 가장 높은 기록 대비 비율(%) 계산해서 게이지 채우기
+            // 게이지 채우기
             val progressPercent = ((item.count.toFloat() / maxCount.toFloat()) * 100).toInt()
             progressValue.progress = progressPercent
 
-            // 7.2.4 가치 항목 클릭 시 필터링 모아보기 화면으로 이동
+            val symbolRes = when (item.valueName) {
+                "위로" -> R.drawable.ic_symbol_comfort
+                "휴식" -> R.drawable.ic_symbol_rest
+                "관계" -> R.drawable.ic_symbol_relation
+                "추억" -> R.drawable.ic_symbol_memory
+                "배움" -> R.drawable.ic_symbol_learn
+                "영감" -> R.drawable.ic_symbol_inspire
+                "마음 표현" -> R.drawable.ic_symbol_heart
+                else -> R.drawable.ic_symbol_comfort
+            }
+            ivValueSymbol.setImageResource(symbolRes)
+
             itemView.setOnClickListener {
                 onItemClick(item.valueName)
             }

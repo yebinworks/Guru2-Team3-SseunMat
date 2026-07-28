@@ -16,6 +16,9 @@ import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
 import java.util.Calendar
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeFeedFragment : Fragment() {
 
@@ -55,9 +58,8 @@ class HomeFeedFragment : Fragment() {
         vpReceiptCards = view.findViewById(R.id.vp_receipt_cards)
         tvCardIndicator = view.findViewById(R.id.tv_card_indicator)
 
-        // 현재 월 표시 (예: 7월)
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
-        tvCurrentMonth.text = "${currentMonth}월"
+        val sdf = SimpleDateFormat("yyyy. MM", Locale.KOREA)
+        tvCurrentMonth.text = sdf.format(Date())
     }
 
     private fun setupViewPager() {
