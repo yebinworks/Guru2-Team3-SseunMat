@@ -3,6 +3,7 @@ package com.guru2.team3.sseunmat.ui.feed
 // [예빈] 3. 홈 화면 (당월 영수증 피드)
 
 import StackCardPageTransformer
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
 import java.util.Calendar
 import androidx.recyclerview.widget.RecyclerView
+import com.guru2.team3.sseunmat.ui.mypage.MyPageActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -23,6 +25,7 @@ import java.util.Locale
 class HomeFeedFragment : Fragment() {
 
     private lateinit var tvCurrentMonth: TextView
+    private lateinit var btnProfile: ImageView
     private lateinit var layoutEmptyState: LinearLayout
     private lateinit var vpReceiptCards: ViewPager2
     private lateinit var tvCardIndicator: TextView
@@ -57,6 +60,12 @@ class HomeFeedFragment : Fragment() {
         layoutEmptyState = view.findViewById(R.id.layout_empty_state)
         vpReceiptCards = view.findViewById(R.id.vp_receipt_cards)
         tvCardIndicator = view.findViewById(R.id.tv_card_indicator)
+        btnProfile = view.findViewById(R.id.btn_profile)
+
+        btnProfile.setOnClickListener {
+            val intent = Intent(requireContext(), MyPageActivity::class.java)
+            startActivity(intent)
+        }
 
         val sdf = SimpleDateFormat("yyyy. MM", Locale.KOREA)
         tvCurrentMonth.text = sdf.format(Date())

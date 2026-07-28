@@ -123,4 +123,47 @@ class FirebaseService {
                 onComplete(false)
             }
     }
+
+    // 유저 프로필 정보 가져오기 (마이페이지용)
+    fun getUserProfile(onResult: (Users?) -> Unit) {
+        val currentUserId = getCurrentUserId()
+        if (currentUserId.isEmpty()) {
+            onResult(null)
+            return
+        }
+
+        db.collection("users").document(currentUserId)
+            .get()
+            .addOnSuccessListener { document ->
+                val user = document.toObject(Users::class.java)
+                onResult(user)
+            }
+            .addOnFailureListener {
+                onResult(null)
+            }
+    }
+
+    // 전체 작성 영수증 개수 가져오기
+    fun getTotalReceiptCount(onResult: (Int) -> Unit) {
+        val currentUserId = getCurrentUserId()
+        if (currentUserId.isEmpty()) {
+            onResult(0)
+            return
+        }
+
+        db.collection("receipts")
+            .whereEqualTo("usersId", currentUserId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                onResult(querySnapshot.size())
+            }
+            .addOnFailureListener {
+                onResult(0)
+            }
+    }
+
+    // 로그아웃
+    fun logout() {
+        auth.signOut()
+    }
 }
