@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.model.Receipt
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
+import com.guru2.team3.sseunmat.ui.mypage.MyPageActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -26,6 +27,7 @@ import java.util.Locale
 class ArchiveFragment : Fragment() {
 
     private lateinit var tvArchiveDate: TextView
+    private lateinit var btnProfile: ImageView
     private lateinit var layoutArchiveEmpty: LinearLayout
     private lateinit var layoutArchiveContent: NestedScrollView
     private lateinit var rvValueGraph: RecyclerView
@@ -58,9 +60,15 @@ class ArchiveFragment : Fragment() {
         layoutArchiveEmpty = view.findViewById(R.id.layout_archive_empty)
         layoutArchiveContent = view.findViewById(R.id.layout_archive_content)
         rvValueGraph = view.findViewById(R.id.rv_value_graph)
+        btnProfile = view.findViewById(R.id.btn_profile)
 
         cardTopValue = view.findViewById(R.id.card_top_value)
         tvDateRangeChip = view.findViewById(R.id.tv_date_range_chip)
+
+        btnProfile.setOnClickListener {
+            val intent = Intent(requireContext(), MyPageActivity::class.java)
+            startActivity(intent)
+        }
 
         // 5개 만족도 도트 ImageView 리스트 초기화
         ratingDots.clear()
