@@ -2,22 +2,28 @@ package com.guru2.team3.sseunmat.ui.archive
 
 // [예빈] 8. 특정 가치별 영수증 목록
 
+import StackCardPageTransformer
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
 import com.guru2.team3.sseunmat.ui.feed.ReceiptCardAdapter
 
 class ValueDetailActivity : AppCompatActivity() {
+
     private lateinit var btnBack: ImageView
     private lateinit var tvTitle: TextView
+    private lateinit var btnProfile: ImageView
     private lateinit var vpReceiptCards: ViewPager2
     private lateinit var tvCardIndicator: TextView
-    private lateinit var layoutEmpty: View
+    private lateinit var layoutEmpty: LinearLayout
 
     private val firebaseService = FirebaseService()
     private lateinit var cardAdapter: ReceiptCardAdapter
@@ -28,29 +34,49 @@ class ValueDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_value_detail)
 
         selectedValue = intent.getStringExtra("SELECTED_VALUE") ?: ""
+        Log.d("ValueDetailActivity", "전달받은 SELECTED_VALUE: '$selectedValue'")
 
+        initViews()
+        setupViewPager()
+        loadFilteredReceipts()
+    }
+
+    private fun initViews() {
         btnBack = findViewById(R.id.btn_back)
         tvTitle = findViewById(R.id.tv_header_title)
+        btnProfile = findViewById(R.id.btn_profile)
         vpReceiptCards = findViewById(R.id.vp_receipt_cards)
         tvCardIndicator = findViewById(R.id.tv_card_indicator)
         layoutEmpty = findViewById(R.id.layout_empty_state)
 
-        tvTitle.text = selectedValue
-        btnBack.setOnClickListener { finish() }
+        tvTitle.text = if (selectedValue.isNotBlank()) selectedValue else "전체 가치"
 
-        // 기존 카드 어댑터 재사용
+        btnBack.setOnClickListener { finish() }
+    }
+
+    private fun setupViewPager() {
         cardAdapter = ReceiptCardAdapter(mutableListOf()) {
             if (cardAdapter.itemCount == 0) {
-                layoutEmpty.visibility = View.VISIBLE
-                vpReceiptCards.visibility = View.GONE
-                tvCardIndicator.visibility = View.GONE
+                showEmptyState(true)
             } else {
+                showEmptyState(false)
                 val currentPos = vpReceiptCards.currentItem
                 tvCardIndicator.text = "${currentPos + 1} / ${cardAdapter.itemCount}"
             }
         }
+
         vpReceiptCards.adapter = cardAdapter
         vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
+        vpReceiptCards.offscreenPageLimit = 3
+
+        vpReceiptCards.post {
+            (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
+                clipChildren = false
+                clipToPadding = false
+            }
+        }
+
+        vpReceiptCards.setPageTransformer(StackCardPageTransformer())
 
         vpReceiptCards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -61,27 +87,40 @@ class ValueDetailActivity : AppCompatActivity() {
                 }
             }
         })
-
-        loadFilteredReceipts()
     }
 
     private fun loadFilteredReceipts() {
         firebaseService.getThisMonthReceipts { list ->
-            // 해당 가치로만 필터링
-            val filteredList = list.filter { it.value == selectedValue }
-
-            if (filteredList.isEmpty()) {
-                layoutEmpty.visibility = View.VISIBLE
-                vpReceiptCards.visibility = View.GONE
-                tvCardIndicator.visibility = View.GONE
+            val filteredList = if (selectedValue.isBlank()) {
+                list
             } else {
-                layoutEmpty.visibility = View.GONE
-                vpReceiptCards.visibility = View.VISIBLE
-                tvCardIndicator.visibility = View.VISIBLE
-
-                cardAdapter.updateData(filteredList)
-                tvCardIndicator.text = "1 / ${filteredList.size}"
+                list.filter { it.value.trim() == selectedValue.trim() }
             }
+
+            Log.d("ValueDetailActivity", "전체 개수: ${list.size}, 필터링 개수: ${filteredList.size}")
+
+            runOnUiThread {
+                if (filteredList.isEmpty()) {
+                    showEmptyState(true)
+                } else {
+                    showEmptyState(false)
+                    cardAdapter.updateData(filteredList)
+                    val currentPos = vpReceiptCards.currentItem
+                    tvCardIndicator.text = "${currentPos + 1} / ${filteredList.size}"
+                }
+            }
+        }
+    }
+
+    private fun showEmptyState(isEmpty: Boolean) {
+        if (isEmpty) {
+            layoutEmpty.visibility = View.VISIBLE
+            vpReceiptCards.visibility = View.GONE
+            tvCardIndicator.visibility = View.GONE
+        } else {
+            layoutEmpty.visibility = View.GONE
+            vpReceiptCards.visibility = View.VISIBLE
+            tvCardIndicator.visibility = View.VISIBLE
         }
     }
 }
