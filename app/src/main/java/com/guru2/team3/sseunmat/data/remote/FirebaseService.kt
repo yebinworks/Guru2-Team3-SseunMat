@@ -75,12 +75,14 @@ class FirebaseService {
             return
         }
 
-        // 이번 달 1일 00:00:00 계산
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
+        // 이번 달 1일 00:00:00.000 계산
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
         val startOfMonth = calendar.time
 
         db.collection("receipts")
@@ -90,14 +92,17 @@ class FirebaseService {
             .addOnSuccessListener { querySnapshot ->
                 val list = querySnapshot.toObjects(Receipt::class.java)
 
-                // 3.1.2 정렬: 결제 날짜 내림차순 -> createdAt 내림차순
+                // 정렬: 결제 날짜 내림차순 -> createdAt 내림차순
                 val sortedList = list.sortedWith(
                     compareByDescending<Receipt> { it.paymentDate }
                         .thenByDescending { it.createdAt }
                 )
+                android.util.Log.d("FirebaseService", "조회 성공: ${sortedList.size}개 검색됨")
                 onResult(sortedList)
             }
-            .addOnFailureListener {
+            .addOnFailureListener { exception ->
+                // 쿼리 실패 원인 로그 출력 (Index 미생성 등의 원인 파악용)
+                android.util.Log.e("FirebaseService", "영수증 불러오기 실패: ${exception.message}", exception)
                 onResult(emptyList())
             }
     }

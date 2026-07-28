@@ -74,12 +74,13 @@ class HomeFeedFragment : Fragment() {
 
         vpReceiptCards.adapter = cardAdapter
         vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
-
         vpReceiptCards.offscreenPageLimit = 3
 
-        (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
-            clipChildren = false
-            clipToPadding = false
+        vpReceiptCards.post {
+            (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
+                clipChildren = false
+                clipToPadding = false
+            }
         }
 
         vpReceiptCards.setPageTransformer(StackCardPageTransformer())
@@ -99,18 +100,21 @@ class HomeFeedFragment : Fragment() {
         firebaseService.getThisMonthReceipts { receiptList ->
             if (!isAdded) return@getThisMonthReceipts
 
-            if (receiptList.isEmpty()) {
-                // 3.1.3 홈 빈 상태 표시
-                layoutEmptyState.visibility = View.VISIBLE
-                vpReceiptCards.visibility = View.GONE
-                tvCardIndicator.visibility = View.GONE
-            } else {
-                layoutEmptyState.visibility = View.GONE
-                vpReceiptCards.visibility = View.VISIBLE
-                tvCardIndicator.visibility = View.VISIBLE
+            // UI 갱신은 메인 스레드에서 처리
+            activity?.runOnUiThread {
+                if (receiptList.isEmpty()) {
+                    layoutEmptyState.visibility = View.VISIBLE
+                    vpReceiptCards.visibility = View.GONE
+                    tvCardIndicator.visibility = View.GONE
+                } else {
+                    layoutEmptyState.visibility = View.GONE
+                    vpReceiptCards.visibility = View.VISIBLE
+                    tvCardIndicator.visibility = View.VISIBLE
 
-                cardAdapter.updateData(receiptList)
-                tvCardIndicator.text = "1 / ${receiptList.size}"
+                    cardAdapter.updateData(receiptList)
+                    val currentPos = vpReceiptCards.currentItem
+                    tvCardIndicator.text = "${currentPos + 1} / ${receiptList.size}"
+                }
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.ui.archive.ArchiveFragment
 import com.guru2.team3.sseunmat.ui.feed.HomeFeedFragment
+import com.guru2.team3.sseunmat.ui.write.ReceiptModeBottomSheet
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,7 +38,10 @@ class MainActivity : AppCompatActivity() {
 
         // 추가(+)
         btnNavAdd.setOnClickListener {
-            // TODO: 옵션 선택 화면 연결
+            btnNavAdd.setOnClickListener {
+                val bottomSheet = ReceiptModeBottomSheet()
+                bottomSheet.show(supportFragmentManager, "ReceiptModeBottomSheet")
+            }
         }
 
         // 아카이브

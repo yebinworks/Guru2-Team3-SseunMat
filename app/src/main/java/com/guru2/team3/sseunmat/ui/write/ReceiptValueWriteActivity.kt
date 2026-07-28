@@ -2,6 +2,7 @@ package com.guru2.team3.sseunmat.ui.write
 
 // [예빈] 6.4~6.7 가치 선택 및 등록 처리 액티비티
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.guru2.team3.sseunmat.R
 import com.guru2.team3.sseunmat.data.model.Receipt
 import com.guru2.team3.sseunmat.data.remote.FirebaseService
+import com.guru2.team3.sseunmat.ui.main.MainActivity
 import com.guru2.team3.sseunmat.util.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -194,7 +196,12 @@ class ReceiptValueWriteActivity : AppCompatActivity() {
         firebaseService.addReceipt(newReceipt) { isSuccess ->
             if (isSuccess) {
                 showToast("영수증이 저장되었습니다.")
-                setResult(RESULT_OK)
+
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+
+                startActivity(intent)
                 finish()
             } else {
                 showToast("영수증 저장에 실패했습니다. 네트워크 연결을 확인해 주세요.")
