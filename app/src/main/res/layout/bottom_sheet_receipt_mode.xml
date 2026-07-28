@@ -1,7 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--[주은]-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- [주은] 4. 영수증 등록 방식 선택 (바텀시트) -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingHorizontal="@dimen/spacing_huge"
+    android:paddingTop="@dimen/spacing_huge"
+    android:paddingBottom="@dimen/spacing_large">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- 안내 문구 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="영수증을 등록할 방식을 선택해 주세요"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_subtitle"
+        android:textStyle="bold" />
+
+    <!-- [4.1.2] 영수증 촬영하기 카드 -->
+    <LinearLayout
+        android:id="@+id/card_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_input_box"
+        android:padding="@dimen/spacing_medium">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="촬영 아이콘" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="영수증 촬영하기"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:text="카메라로 영수증을 촬영해 자동으로 정보를 불러와요"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_small" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_medium"
+            android:layout_height="@dimen/icon_size_medium"
+            android:src="@android:drawable/ic_menu_more"
+            android:contentDescription="이동" />
+    </LinearLayout>
+
+    <!-- [4.1.3] 갤러리에서 불러오기 카드 -->
+    <LinearLayout
+        android:id="@+id/card_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_input_box"
+        android:padding="@dimen/spacing_medium">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:contentDescription="갤러리 아이콘" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="갤러리에서 불러오기"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:text="저장된 이미지를 선택해 자동으로 정보를 불러와요"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_small" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_medium"
+            android:layout_height="@dimen/icon_size_medium"
+            android:src="@android:drawable/ic_menu_more"
+            android:contentDescription="이동" />
+    </LinearLayout>
+
+    <!-- [4.1.4] 직접 입력하기 카드 -->
+    <LinearLayout
+        android:id="@+id/card_manual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_input_box"
+        android:padding="@dimen/spacing_medium">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:contentDescription="직접 입력 아이콘" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="직접 입력하기"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:text="영수증 정보가 없을 때 직접 입력할 수 있어요"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_small" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_medium"
+            android:layout_height="@dimen/icon_size_medium"
+            android:src="@android:drawable/ic_menu_more"
+            android:contentDescription="이동" />
+    </LinearLayout>
+</LinearLayout>
