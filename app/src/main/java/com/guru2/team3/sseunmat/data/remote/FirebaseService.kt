@@ -136,6 +136,7 @@ class FirebaseService {
                 return
             }
 
+            // 이번 달 시작일 (예: 7월 1일 00:00:00)
             val calendar = Calendar.getInstance().apply {
                 set(Calendar.DAY_OF_MONTH, 1)
                 set(Calendar.HOUR_OF_DAY, 0)
@@ -145,9 +146,14 @@ class FirebaseService {
             }
             val startOfMonth = calendar.time
 
+            // 다음 달 시작일 (예: 8월 1일 00:00:00)
+            calendar.add(Calendar.MONTH, 1)
+            val startOfNextMonth = calendar.time
+
             db.collection("receipts")
                 .whereEqualTo("usersId", currentUserId)
                 .whereGreaterThanOrEqualTo("paymentDate", startOfMonth)
+                .whereLessThan("paymentDate", startOfNextMonth)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     try {
