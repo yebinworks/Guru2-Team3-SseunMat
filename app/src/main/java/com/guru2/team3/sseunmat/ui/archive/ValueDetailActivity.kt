@@ -31,16 +31,24 @@ class ValueDetailActivity : AppCompatActivity() {
     private lateinit var cardAdapter: ReceiptCardAdapter
     private var selectedValue: String = ""
 
+    companion object {
+        private const val TAG = "ValueDetailActivity"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_value_detail)
+        try {
+            setContentView(R.layout.activity_value_detail)
 
-        selectedValue = intent.getStringExtra("SELECTED_VALUE") ?: ""
-        Log.d("ValueDetailActivity", "전달받은 SELECTED_VALUE: '$selectedValue'")
+            selectedValue = intent?.getStringExtra("SELECTED_VALUE") ?: ""
+            Log.d(TAG, "전달받은 SELECTED_VALUE: '$selectedValue'")
 
-        initViews()
-        setupViewPager()
-        loadFilteredReceipts()
+            initViews()
+            setupViewPager()
+            loadFilteredReceipts()
+        } catch (e: Exception) {
+            Log.e(TAG, "onCreate 처리 중 오류 발생", e)
+        }
     }
 
     private fun initViews() {
@@ -56,78 +64,104 @@ class ValueDetailActivity : AppCompatActivity() {
         btnBack.setOnClickListener { finish() }
 
         btnProfile.setOnClickListener {
-            val intent = Intent(this, MyPageActivity::class.java)
-            startActivity(intent)
+            try {
+                val intent = Intent(this, MyPageActivity::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e(TAG, "마이페이지 이동 중 오류 발생", e)
+            }
         }
     }
 
     private fun setupViewPager() {
-        cardAdapter = ReceiptCardAdapter(mutableListOf()) {
-            if (cardAdapter.itemCount == 0) {
-                showEmptyState(true)
-            } else {
-                showEmptyState(false)
-                val currentPos = vpReceiptCards.currentItem
-                tvCardIndicator.text = "${currentPos + 1} / ${cardAdapter.itemCount}"
-            }
-        }
-
-        vpReceiptCards.adapter = cardAdapter
-        vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
-        vpReceiptCards.offscreenPageLimit = 3
-
-        vpReceiptCards.post {
-            (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
-                clipChildren = false
-                clipToPadding = false
-            }
-        }
-
-        vpReceiptCards.setPageTransformer(StackCardPageTransformer())
-
-        vpReceiptCards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val total = cardAdapter.itemCount
-                if (total > 0) {
-                    tvCardIndicator.text = "${position + 1} / $total"
+        try {
+            cardAdapter = ReceiptCardAdapter(mutableListOf()) {
+                if (cardAdapter.itemCount == 0) {
+                    showEmptyState(true)
+                } else {
+                    showEmptyState(false)
+                    val currentPos = vpReceiptCards.currentItem.coerceIn(0, cardAdapter.itemCount - 1)
+                    tvCardIndicator.text = "${currentPos + 1} / ${cardAdapter.itemCount}"
                 }
             }
-        })
+
+            vpReceiptCards.adapter = cardAdapter
+            vpReceiptCards.orientation = ViewPager2.ORIENTATION_VERTICAL
+            vpReceiptCards.offscreenPageLimit = 3
+
+            vpReceiptCards.post {
+                try {
+                    (vpReceiptCards.getChildAt(0) as? RecyclerView)?.apply {
+                        clipChildren = false
+                        clipToPadding = false
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "ViewPager2 내 RecyclerView 설정 중 오류 발생", e)
+                }
+            }
+
+            vpReceiptCards.setPageTransformer(StackCardPageTransformer())
+
+            vpReceiptCards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    val total = cardAdapter.itemCount
+                    if (total > 0) {
+                        val safePosition = position.coerceIn(0, total - 1)
+                        tvCardIndicator.text = "${safePosition + 1} / $total"
+                    }
+                }
+            })
+        } catch (e: Exception) {
+            Log.e(TAG, "setupViewPager 초기화 중 오류 발생", e)
+        }
     }
 
     private fun loadFilteredReceipts() {
         firebaseService.getThisMonthReceipts { list ->
-            val filteredList = if (selectedValue.isBlank()) {
-                list
-            } else {
-                list.filter { it.value.trim() == selectedValue.trim() }
-            }
-
-            Log.d("ValueDetailActivity", "전체 개수: ${list.size}, 필터링 개수: ${filteredList.size}")
+            // Activity가 종료 중이거나 파괴된 상태인 경우 처리하지 않음
+            if (isFinishing || isDestroyed) return@getThisMonthReceipts
 
             runOnUiThread {
-                if (filteredList.isEmpty()) {
+                try {
+                    val safeList = list ?: emptyList()
+                    val filteredList = if (selectedValue.isBlank()) {
+                        safeList
+                    } else {
+                        safeList.filter { it.value.trim() == selectedValue.trim() }
+                    }
+
+                    Log.d(TAG, "전체 개수: ${safeList.size}, 필터링 개수: ${filteredList.size}")
+
+                    if (filteredList.isEmpty()) {
+                        showEmptyState(true)
+                    } else {
+                        showEmptyState(false)
+                        cardAdapter.updateData(filteredList)
+                        val currentPos = vpReceiptCards.currentItem.coerceIn(0, filteredList.size - 1)
+                        tvCardIndicator.text = "${currentPos + 1} / ${filteredList.size}"
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "필터링 데이터 UI 반영 중 오류 발생", e)
                     showEmptyState(true)
-                } else {
-                    showEmptyState(false)
-                    cardAdapter.updateData(filteredList)
-                    val currentPos = vpReceiptCards.currentItem
-                    tvCardIndicator.text = "${currentPos + 1} / ${filteredList.size}"
                 }
             }
         }
     }
 
     private fun showEmptyState(isEmpty: Boolean) {
-        if (isEmpty) {
-            layoutEmpty.visibility = View.VISIBLE
-            vpReceiptCards.visibility = View.GONE
-            tvCardIndicator.visibility = View.GONE
-        } else {
-            layoutEmpty.visibility = View.GONE
-            vpReceiptCards.visibility = View.VISIBLE
-            tvCardIndicator.visibility = View.VISIBLE
+        try {
+            if (isEmpty) {
+                layoutEmpty.visibility = View.VISIBLE
+                vpReceiptCards.visibility = View.GONE
+                tvCardIndicator.visibility = View.GONE
+            } else {
+                layoutEmpty.visibility = View.GONE
+                vpReceiptCards.visibility = View.VISIBLE
+                tvCardIndicator.visibility = View.VISIBLE
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "EmptyState 전환 중 오류 발생", e)
         }
     }
 }

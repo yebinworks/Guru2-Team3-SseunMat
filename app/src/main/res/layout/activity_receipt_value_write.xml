@@ -90,7 +90,7 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="위로"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/btn_val_consolation_on" />
+                    android:src="@drawable/btn_val_consolation_off" />
 
                 <!-- 2. 휴식 -->
                 <ImageButton

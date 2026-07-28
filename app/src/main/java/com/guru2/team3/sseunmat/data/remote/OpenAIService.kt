@@ -18,15 +18,20 @@ import java.util.concurrent.TimeUnit
 
 class OpenAIService {
 
-    // AI 이미지 분석을 위해 타임아웃을 30초로 설정
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    suspend fun analyzeReceiptImage(bitmap: Bitmap): Result<Triple<String, String, Long>> = withContext(Dispatchers.IO) {
+    suspend fun analyzeReceiptImage(bitmap: Bitmap?): Result<Triple<String, String, Long>> = withContext(Dispatchers.IO) {
         try {
+            // 비트맵 유효성 검증 (Null 및 Recycle 여부 방어)
+            if (bitmap == null || bitmap.isRecycled || bitmap.width <= 0 || bitmap.height <= 0) {
+                Log.e("OpenAIService", "유효하지 않은 비트맵입니다.")
+                return@withContext Result.failure(IllegalArgumentException("유효하지 않은 이미지 파일입니다."))
+            }
+
             Log.d("OpenAIService", "1. AI 분석 시작 (원본 비트맵 크기: ${bitmap.width}x${bitmap.height})")
 
             val apiKey = BuildConfig.OPENAI_API_KEY
@@ -35,12 +40,15 @@ class OpenAIService {
                 return@withContext Result.failure(IllegalStateException("OpenAI API Key가 누락되었습니다."))
             }
 
-            // 이미지 압축 및 Base64 인코딩
+            // 이미지 리사이징 & Base64 변환
             val resizedBitmap = bitmap.resizeAndCompressBitmap(1024)
             val base64Image = bitmapToBase64(resizedBitmap)
+            if (base64Image.isEmpty()) {
+                return@withContext Result.failure(IllegalStateException("이미지 변환에 실패했습니다."))
+            }
             Log.d("OpenAIService", "2. 이미지 리사이징 & Base64 변환 완료 (Base64 길이: ${base64Image.length})")
 
-            // OpenAI API 요청 JSON 생성 (gpt-4o-mini 지정)
+            // OpenAI API 요청 JSON 생성
             val requestJson = JSONObject().apply {
                 put("model", "gpt-4o-mini")
                 put("response_format", JSONObject().put("type", "json_object"))
@@ -83,31 +91,50 @@ class OpenAIService {
                 .build()
 
             Log.d("OpenAIService", "3. OpenAI API HTTP 요청 전송 중...")
-            val response = client.newCall(request).execute()
-            val responseBody = response.body?.string() ?: ""
 
-            Log.d("OpenAIService", "4. 응답 도착! Response Code: ${response.code}")
+            // Response 자원 해제(use) 및 HTTP 요청 처리
+            client.newCall(request).execute().use { response ->
+                val responseBody = response.body?.string() ?: ""
+                Log.d("OpenAIService", "4. 응답 도착! Response Code: ${response.code}")
 
-            if (!response.isSuccessful) {
-                Log.e("OpenAIService", "OpenAI API 에러 응답 Body: $responseBody")
-                return@withContext Result.failure(RuntimeException("OpenAI API 에러 (${response.code}): $responseBody"))
+                if (!response.isSuccessful) {
+                    Log.e("OpenAIService", "OpenAI API 에러 응답 Body: $responseBody")
+                    return@withContext Result.failure(RuntimeException("OpenAI API 에러 (${response.code}): $responseBody"))
+                }
+
+                // JSON 파싱 예외 안전 처리
+                return@withContext try {
+                    val jsonResponse = JsonParser.parseString(responseBody).asJsonObject
+                    val choices = jsonResponse.getAsJsonArray("choices")
+
+                    if (choices == null || choices.size() == 0) {
+                        return@withContext Result.failure(IllegalStateException("OpenAI 응답 데이터가 비어있습니다."))
+                    }
+
+                    val contentText = choices.get(0).asJsonObject
+                        .getAsJsonObject("message")
+                        .get("content")?.asString ?: "{}"
+
+                    Log.d("OpenAIService", "5. AI 분석 텍스트 결과: $contentText")
+
+                    val parsedData = JsonParser.parseString(contentText).asJsonObject
+                    val store = parsedData.get("store")?.asString ?: ""
+                    val date = parsedData.get("date")?.asString ?: ""
+
+                    // amount 가 문자열("1000")이나 소수점 형태로 올 경우 예외 방어
+                    val amountRaw = parsedData.get("amount")
+                    val amount = when {
+                        amountRaw == null -> 0L
+                        amountRaw.isJsonPrimitive && amountRaw.asJsonPrimitive.isNumber -> amountRaw.asLong
+                        else -> amountRaw.asString.replace(Regex("[^0-9]"), "").toLongOrNull() ?: 0L
+                    }
+
+                    Result.success(Triple(store, date, amount))
+                } catch (e: Exception) {
+                    Log.e("OpenAIService", "JSON 파싱 중 오류 발생: ${e.message}", e)
+                    Result.failure(e)
+                }
             }
-
-            // 응답 JSON 파싱
-            val jsonResponse = JsonParser.parseString(responseBody).asJsonObject
-            val contentText = jsonResponse.getAsJsonArray("choices")
-                .get(0).asJsonObject
-                .getAsJsonObject("message")
-                .get("content").asString
-
-            Log.d("OpenAIService", "5. AI 분석 텍스트 결과: $contentText")
-
-            val parsedData = JsonParser.parseString(contentText).asJsonObject
-            val store = parsedData.get("store")?.asString ?: ""
-            val date = parsedData.get("date")?.asString ?: ""
-            val amount = parsedData.get("amount")?.asLong ?: 0L
-
-            Result.success(Triple(store, date, amount))
 
         } catch (e: Exception) {
             Log.e("OpenAIService", "OpenAI 서비스 예외 발생", e)
@@ -116,22 +143,32 @@ class OpenAIService {
     }
 
     private fun bitmapToBase64(bitmap: Bitmap): String {
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-        val byteArray = outputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP)
+        return try {
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+            val byteArray = outputStream.toByteArray()
+            Base64.encodeToString(byteArray, Base64.NO_WRAP)
+        } catch (e: Exception) {
+            Log.e("OpenAIService", "Base64 인코딩 실패", e)
+            ""
+        }
     }
 
     private fun Bitmap.resizeAndCompressBitmap(maxDimension: Int = 1024): Bitmap {
-        val width = this.width
-        val height = this.height
-        if (width <= maxDimension && height <= maxDimension) return this
-        val ratio = width.toFloat() / height.toFloat()
-        val (targetWidth, targetHeight) = if (ratio > 1) {
-            maxDimension to (maxDimension / ratio).toInt()
-        } else {
-            (maxDimension * ratio).toInt() to maxDimension
+        return try {
+            val width = this.width
+            val height = this.height
+            if (width <= maxDimension && height <= maxDimension) return this
+            val ratio = width.toFloat() / height.toFloat()
+            val (targetWidth, targetHeight) = if (ratio > 1) {
+                maxDimension to (maxDimension / ratio).toInt()
+            } else {
+                (maxDimension * ratio).toInt() to maxDimension
+            }
+            Bitmap.createScaledBitmap(this, Math.max(1, targetWidth), Math.max(1, targetHeight), true)
+        } catch (e: Exception) {
+            Log.e("OpenAIService", "비트맵 리사이징 실패, 원본 유지", e)
+            this
         }
-        return Bitmap.createScaledBitmap(this, Math.max(1, targetWidth), Math.max(1, targetHeight), true)
     }
 }
