@@ -28,17 +28,6 @@
             android:src="@drawable/ic_launcher"
             android:contentDescription="앱 로고" />
 
-        <TextView
-            android:id="@+id/tv_app_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:text="쓴맛"
-            android:textStyle="bold"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_header" />
-
         <!-- 이메일 -->
         <TextView
             android:layout_width="wrap_content"
