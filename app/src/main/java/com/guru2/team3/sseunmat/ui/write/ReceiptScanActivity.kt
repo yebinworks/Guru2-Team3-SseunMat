@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-// 5. 영수증 스캔 및 AI 분석 화면 (촬영 가이드 화면)
+// [예빈] 5. 영수증 스캔 및 AI 분석 화면 (촬영 가이드 화면)
 class ReceiptScanActivity : AppCompatActivity() {
 
     private lateinit var btnBack: ImageView
@@ -44,66 +44,96 @@ class ReceiptScanActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
     private var photoFile: File? = null
 
+    companion object {
+        private const val TAG = "ReceiptScanActivity"
+    }
+
     // 원본 카메라 촬영 결과 받아오기
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-        if (isSuccess && photoUri != null) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val bitmap = getBitmapFromUri(photoUri!!)
-                withContext(Dispatchers.Main) {
-                    if (bitmap != null) {
-                        analyzeImageWithOpenAI(bitmap)
-                    } else {
-                        showToast("이미지를 불러오지 못했습니다. 직접 입력 화면으로 이동합니다.")
-                        navigateToManualWrite()
+        try {
+            if (isSuccess && photoUri != null) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val bitmap = getBitmapFromUri(photoUri!!)
+                    withContext(Dispatchers.Main) {
+                        if (isFinishing || isDestroyed) return@withContext
+                        if (bitmap != null) {
+                            analyzeImageWithOpenAI(bitmap)
+                        } else {
+                            showToast("이미지를 불러오지 못했습니다. 직접 입력 화면으로 이동합니다.")
+                            navigateToManualWrite()
+                        }
                     }
                 }
+            } else {
+                Log.d(TAG, "카메라 촬영이 취소되었습니다.")
+                clearTempFile()
             }
-        } else {
-            Log.d("ReceiptScan", "카메라 촬영이 취소되었습니다.")
+        } catch (e: Exception) {
+            Log.e(TAG, "cameraLauncher 처리 중 오류 발생", e)
+            navigateToManualWrite()
         }
     }
 
     // 갤러리 이미지 선택 결과 받아오기
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val bitmap = getBitmapFromUri(it)
-                withContext(Dispatchers.Main) {
-                    if (bitmap != null) {
-                        analyzeImageWithOpenAI(bitmap)
-                    } else {
-                        showToast("이미지를 불러오지 못했습니다. 직접 입력 화면으로 이동합니다.")
-                        navigateToManualWrite()
+        try {
+            if (uri != null) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val bitmap = getBitmapFromUri(uri)
+                    withContext(Dispatchers.Main) {
+                        if (isFinishing || isDestroyed) return@withContext
+                        if (bitmap != null) {
+                            analyzeImageWithOpenAI(bitmap)
+                        } else {
+                            showToast("이미지를 불러오지 못했습니다. 직접 입력 화면으로 이동합니다.")
+                            navigateToManualWrite()
+                        }
                     }
                 }
+            } else {
+                Log.d(TAG, "갤러리 선택이 취소되었습니다.")
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "galleryLauncher 처리 중 오류 발생", e)
+            navigateToManualWrite()
         }
     }
 
     // 권한 요청 처리
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            startImagePickOrCapture()
-        } else {
-            showPermissionDeniedDialog()
+        try {
+            if (isGranted) {
+                startImagePickOrCapture()
+            } else {
+                showPermissionDeniedDialog()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "permissionLauncher 처리 중 오류 발생", e)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_receipt_scan)
+        try {
+            enableEdgeToEdge()
+            setContentView(R.layout.activity_receipt_scan)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+            val mainView = findViewById<View>(R.id.main) ?: findViewById(android.R.id.content)
+            mainView?.let { v ->
+                ViewCompat.setOnApplyWindowInsetsListener(v) { view, insets ->
+                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                    view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                    insets
+                }
+            }
+
+            isGalleryMode = intent?.getBooleanExtra("IS_GALLERY_MODE", true) ?: true
+
+            initViews()
+            setupListeners()
+        } catch (e: Exception) {
+            Log.e(TAG, "onCreate 처리 중 오류 발생", e)
         }
-
-        isGalleryMode = intent.getBooleanExtra("IS_GALLERY_MODE", true)
-
-        initViews()
-        setupListeners()
     }
 
     private fun initViews() {
@@ -125,90 +155,125 @@ class ReceiptScanActivity : AppCompatActivity() {
 
         // 하단 버튼 클릭 시 권한 확인 후 카메라/갤러리 실행
         btnReceiptCapture.setOnClickListener {
-            if (layoutAnalysisLoading.visibility == View.VISIBLE) return@setOnClickListener
-            checkPermissionAndProceed()
+            try {
+                if (layoutAnalysisLoading.visibility == View.VISIBLE) return@setOnClickListener
+                checkPermissionAndProceed()
+            } catch (e: Exception) {
+                Log.e(TAG, "버튼 클릭 처리 중 오류 발생", e)
+            }
         }
     }
 
     private fun checkPermissionAndProceed() {
-        // 갤러리 모드는 Photo Picker 사용으로 별도 권한 없이 가능, 카메라 모드만 권한 체크
-        if (isGalleryMode) {
-            startImagePickOrCapture()
-            return
-        }
+        try {
+            // 갤러리 모드는 Photo Picker 사용으로 별도 권한 없이 가능, 카메라 모드만 권한 체크
+            if (isGalleryMode) {
+                startImagePickOrCapture()
+                return
+            }
 
-        val permission = Manifest.permission.CAMERA
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+            val permission = Manifest.permission.CAMERA
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                startImagePickOrCapture()
+            } else {
+                permissionLauncher.launch(permission)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "권한 검사 중 오류 발생", e)
             startImagePickOrCapture()
-        } else {
-            permissionLauncher.launch(permission)
         }
     }
 
     private fun startImagePickOrCapture() {
-        if (isGalleryMode) {
-            galleryLauncher.launch("image/*")
-        } else {
-            try {
+        try {
+            if (isGalleryMode) {
+                galleryLauncher.launch("image/*")
+            } else {
                 // 원본 사진을 저장할 임시 파일 생성
-                photoFile = File.createTempFile("receipt_", ".jpg", cacheDir).apply {
-                    createNewFile()
-                }
+                clearTempFile()
+                val tempFile = File.createTempFile("receipt_", ".jpg", cacheDir)
+                photoFile = tempFile
                 photoUri = FileProvider.getUriForFile(
                     this,
                     "${applicationContext.packageName}.fileprovider",
-                    photoFile!!
+                    tempFile
                 )
 
-                // Intent 생성 없이 photoUri를 직접 넘겨서 카메라 실행
-                cameraLauncher.launch(photoUri!!)
-            } catch (e: Exception) {
-                Log.e("ReceiptScan", "카메라 준비 중 오류 발생", e)
-                showToast("카메라를 실행할 수 없습니다.")
+                photoUri?.let { uri ->
+                    cameraLauncher.launch(uri)
+                } ?: run {
+                    showToast("카메라를 실행할 수 없습니다.")
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "카메라/갤러리 실행 준비 중 오류 발생", e)
+            showToast("카메라를 실행할 수 없습니다.")
         }
     }
 
     // OpenAI API로 이미지 전달 후 분석
     private fun analyzeImageWithOpenAI(bitmap: Bitmap) {
-        layoutCameraGuide.visibility = View.GONE
-        layoutAnalysisLoading.visibility = View.VISIBLE
+        try {
+            layoutCameraGuide.visibility = View.GONE
+            layoutAnalysisLoading.visibility = View.VISIBLE
 
-        lifecycleScope.launch {
-            val result = openAIService.analyzeReceiptImage(bitmap)
-            layoutAnalysisLoading.visibility = View.GONE
+            lifecycleScope.launch {
+                val result = openAIService.analyzeReceiptImage(bitmap)
 
-            result.onSuccess { (store, date, amount) ->
-                val intent = Intent(this@ReceiptScanActivity, ReceiptWriteActivity::class.java).apply {
-                    putExtra("IS_GALLERY_MODE", isGalleryMode)
-                    putExtra("STORE", store)
-                    putExtra("DATE", date)
-                    putExtra("AMOUNT", amount) // amount가 이미 Long이므로 중복 toLong() 제거
+                if (isFinishing || isDestroyed) return@launch
+                layoutAnalysisLoading.visibility = View.GONE
+
+                result.onSuccess { (store, date, amount) ->
+                    try {
+                        val intent = Intent(this@ReceiptScanActivity, ReceiptWriteActivity::class.java).apply {
+                            putExtra("IS_GALLERY_MODE", isGalleryMode)
+                            putExtra("STORE", store)
+                            putExtra("DATE", date)
+                            putExtra("AMOUNT", amount)
+                        }
+                        startActivity(intent)
+                        finish()
+                    } catch (e: Exception) {
+                        Log.e(TAG, "ReceiptWriteActivity 이동 중 오류 발생", e)
+                        navigateToManualWrite()
+                    }
+                }.onFailure { error ->
+                    Log.e(TAG, "OpenAI 호출 실패 원인: ${error.localizedMessage}", error)
+                    showToast("영수증 정보를 정확히 읽지 못했어요. 직접 입력해 주세요.")
+                    navigateToManualWrite()
                 }
-                startActivity(intent)
-                finish()
-            }.onFailure { error ->
-                Log.e("OpenAIError", "OpenAI 호출 실패 원인: ${error.localizedMessage}", error)
-                showToast("영수증 정보를 정확히 읽지 못했어요. 직접 입력해 주세요.")
-                navigateToManualWrite()
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "analyzeImageWithOpenAI 처리 중 오류 발생", e)
+            layoutAnalysisLoading.visibility = View.GONE
+            navigateToManualWrite()
         }
     }
 
     private fun navigateToManualWrite() {
-        val intent = Intent(this, ReceiptWriteActivity::class.java).apply {
-            putExtra("IS_GALLERY_MODE", isGalleryMode)
+        try {
+            if (isFinishing || isDestroyed) return
+            val intent = Intent(this, ReceiptWriteActivity::class.java).apply {
+                putExtra("IS_GALLERY_MODE", isGalleryMode)
+            }
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            Log.e(TAG, "navigateToManualWrite 처리 중 오류 발생", e)
         }
-        startActivity(intent)
-        finish()
     }
 
     private fun showPermissionDeniedDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("권한 필요 안내")
-            .setMessage("영수증을 촬영하려면 카메라 접근 권한이 필요합니다.")
-            .setPositiveButton("확인", null)
-            .show()
+        try {
+            if (isFinishing || isDestroyed) return
+            AlertDialog.Builder(this)
+                .setTitle("권한 필요 안내")
+                .setMessage("영수증을 촬영하려면 카메라 접근 권한이 필요합니다.")
+                .setPositiveButton("확인", null)
+                .show()
+        } catch (e: Exception) {
+            Log.e(TAG, "권한 안내 다이얼로그 표시 중 오류 발생", e)
+        }
     }
 
     private fun getBitmapFromUri(uri: Uri): Bitmap? {
@@ -223,8 +288,27 @@ class ReceiptScanActivity : AppCompatActivity() {
                 MediaStore.Images.Media.getBitmap(contentResolver, uri)
             }
         } catch (e: Exception) {
-            Log.e("ReceiptScan", "Bitmap 생성 오류", e)
+            Log.e(TAG, "Bitmap 생성 오류", e)
             null
         }
+    }
+
+    private fun clearTempFile() {
+        try {
+            photoFile?.let {
+                if (it.exists()) {
+                    it.delete()
+                }
+            }
+            photoFile = null
+            photoUri = null
+        } catch (e: Exception) {
+            Log.e(TAG, "임시 파일 삭제 실패", e)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearTempFile()
     }
 }
